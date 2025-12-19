@@ -25,10 +25,16 @@
   font-size: 48px;
   font-weight: bold;
   text-transform: uppercase;
-  max-width: 50%;
+  max-width: 65%;
 }
 .pagination-wrapper {
   align-self: flex-end;
+}
+.pagination-wrapper i {
+  cursor: pointer;
+}
+.pagination-wrapper i:hover {
+  opacity: 0.7;
 }
 .pagination-wrapper i:last-child {
   margin-left: 10px;
