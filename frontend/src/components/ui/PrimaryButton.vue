@@ -1,0 +1,29 @@
+<template>
+  <button :style="styles">
+    <slot></slot>
+  </button>
+</template>
+
+<script setup>
+import { defineProps } from "vue";
+defineProps({
+  styles: String,
+});
+</script>
+
+<style scoped>
+button {
+  display: flex;
+  flex-direction: row;
+  padding: 10px 35px;
+  border-radius: 25px;
+  box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.15);
+  transition: all 0.53s ease;
+}
+button:hover {
+  opacity: 0.6;
+}
+button:active {
+  box-shadow: none;
+}
+</style>
