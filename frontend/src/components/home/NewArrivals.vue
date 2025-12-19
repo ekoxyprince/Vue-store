@@ -32,6 +32,7 @@ const newArrivals = ref(products.filter((d, i) => d.reviewsCount <= 10));
   font-family: "Poppins", sans-serif;
   text-align: center;
   margin: 3rem 0px 1.5rem 0px;
+  text-transform: uppercase;
 }
 .card-wrapper {
   display: grid;
@@ -44,6 +45,10 @@ const newArrivals = ref(products.filter((d, i) => d.reviewsCount <= 10));
   display: none;
 }
 @media (max-width: 768px) {
+  .header {
+    font-size: 40px;
+    line-height: 36px;
+  }
   .card-wrapper {
     grid-auto-columns: 255px;
   }
@@ -51,6 +56,9 @@ const newArrivals = ref(products.filter((d, i) => d.reviewsCount <= 10));
 @media (max-width: 468px) {
   .card-wrapper {
     grid-auto-columns: 205px;
+  }
+  .header {
+    font-size: 32px;
   }
 }
 </style>

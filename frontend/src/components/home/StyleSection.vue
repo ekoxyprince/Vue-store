@@ -51,6 +51,7 @@ const dressStyles = ref([
   font-family: "Poppins", sans-serif;
   text-align: center;
   margin: 2rem 0px 2rem 0px;
+  text-transform: uppercase;
 }
 .grid-container {
   display: grid;
@@ -77,6 +78,10 @@ const dressStyles = ref([
   background-size: cover;
 }
 @media (max-width: 768px) {
+  .header {
+    font-size: 40px;
+    line-height: 36px;
+  }
 }
 @media (max-width: 468px) {
   .grid-container {
@@ -87,6 +92,9 @@ const dressStyles = ref([
     height: 190px;
     grid-column: span 1 !important;
     /* background-size: 100% 100% !important; */
+  }
+  .header {
+    font-size: 32px;
   }
 }
 </style>

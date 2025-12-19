@@ -3,6 +3,7 @@
   <NewArrivals />
   <TopSelling />
   <StyleSection />
+  <CustomerReviews />
 </template>
 
 <script setup>

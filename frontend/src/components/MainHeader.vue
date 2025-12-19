@@ -6,14 +6,18 @@
     ]"
   >
     <div class="d-flex ga-6 align-center">
-      <i v-if="smAndDown" class="pi pi-bars"></i>
+      <v-app-bar-nav-icon
+        v-if="smAndDown"
+        @click.stop="isActive = !isActive"
+        variant="text"
+      ></v-app-bar-nav-icon>
       <h2>Shop.co</h2>
     </div>
     <nav v-if="mdAndUp" class="d-flex ga-6">
-      <a href="">Shop</a>
-      <a href="">On Sale</a>
-      <a href="">New Arrivals</a>
-      <a href="">Brand</a>
+      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/shop">Shop</RouterLink>
+      <RouterLink to="/about">About us</RouterLink>
+      <RouterLink href="/contact">Contact us</RouterLink>
     </nav>
     <div v-if="mdAndUp" class="search-container" style="flex: 1">
       <i class="pi pi-search"></i>
@@ -28,11 +32,24 @@
       <i class="pi pi-user"></i>
     </div>
   </V-container>
+  <v-navigation-drawer
+    v-model="isActive"
+    :location="$vuetify.display.mobile ? 'left' : undefined"
+    temporary
+  >
+    <div>Navigtion</div>
+  </v-navigation-drawer>
 </template>
 
 <script setup>
 import { useDisplay } from "vuetify";
+import { ref, watch } from "vue";
 const { mdAndUp, smAndDown } = useDisplay();
+const isActive = ref(false);
+const group = ref(null);
+watch(group, () => {
+  isActive.value = false;
+});
 </script>
 
 <style scoped>
