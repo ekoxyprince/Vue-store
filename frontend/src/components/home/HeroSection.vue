@@ -10,7 +10,9 @@
               designed to bring out your individuality and cater to your sense
               of style.
             </p>
-            <PrimaryButton styles="background-color:black; color:#fff;"
+            <PrimaryButton
+              class="btn"
+              styles="background-color:black; color:#fff;"
               >Shop Now</PrimaryButton
             >
             <div class="write-ups">
@@ -76,6 +78,19 @@ const brands = [pat1, pat2, pat3, pat4, pat5];
   letter-spacing: 0%;
   line-height: 64px;
 }
+.content-wrapper > p,
+.write-ups-item > p {
+  font-size: 14.5px;
+  font-weight: 400;
+  font-family: "Poppins", sans-serif;
+  letter-spacing: 0%;
+  line-height: 22px;
+}
+.write-ups-item > h2 {
+  font-size: 40px;
+  font-weight: bold;
+  font-family: "Poppins", sans-serif;
+}
 .content-wrapper {
   margin: 45px 0px;
   display: flex;
@@ -138,6 +153,9 @@ p {
   min-width: 150px;
   transform: translateY(-50%);
 }
+.btn {
+  align-self: start;
+}
 @keyframes spin {
   from {
     translate: 0;
@@ -146,10 +164,40 @@ p {
     translate: -100%;
   }
 }
+@media (max-width: 1024px) {
+  .content-wrapper > h2 {
+    font-size: 38px;
+    line-height: 34px;
+  }
+
+  .write-ups-item > h2 {
+    font-size: 26px;
+  }
+}
 @media (max-width: 468px) {
+  .write-ups {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .write-ups-item:last-child {
+    grid-column: span 2;
+    justify-self: center;
+  }
   .content-wrapper > h2 {
     font-size: 34px;
     line-height: 34px;
+  }
+  .content-wrapper > p,
+  .write-ups-item > p {
+    font-size: 11px;
+  }
+  .write-ups-item > h2 {
+    font-size: 24px;
+  }
+  .btn {
+    align-self: stretch;
+  }
+  .write-ups-item:nth-child(2)::after {
+    display: none;
   }
 }
 </style>

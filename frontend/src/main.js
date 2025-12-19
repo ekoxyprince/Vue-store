@@ -6,6 +6,7 @@
 
 // Plugins
 import { registerPlugins } from "@/plugins";
+import "@/styles/index.css";
 
 import "primeicons/primeicons.css";
 

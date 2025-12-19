@@ -8,13 +8,15 @@
     <div class="card-content">
       <p>{{ product.name }}</p>
       <div class="rating-wrapper">
-        <div>
-          <i class="pi pi-star-fill"></i>
-          <i class="pi pi-star-fill"></i>
-          <i class="pi pi-star-fill"></i>
-          <i class="pi pi-star-fill"></i>
-          <i class="pi pi-star-half-fill"></i>
-        </div>
+        <v-rating
+          hover
+          :length="5"
+          :size="24"
+          :model-value="product.rating"
+          color="#ffc633"
+          active-color="#ffc633"
+          readonly
+        />
         <p>{{ product.rating }}/5</p>
       </div>
       <div>
@@ -77,10 +79,7 @@ defineProps({
   font-weight: 300;
   font-family: "Poppins", sans-serif;
 }
-.rating-wrapper i {
-  margin-right: 5px;
-  color: #ffc633;
-}
+
 @media (max-width: 768px) {
   .card-img-container {
     width: 250px;

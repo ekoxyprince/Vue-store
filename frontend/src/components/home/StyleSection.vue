@@ -1,6 +1,6 @@
 <template>
   <v-container
-    style="background-color: #f2f0f1; margin-top: 20px; border-radius: 20px"
+    style="background-color: #f2f0f1; margin: 40px auto; border-radius: 20px"
   >
     <h2 class="header">Browse By Dress Style</h2>
     <div class="grid-container">
