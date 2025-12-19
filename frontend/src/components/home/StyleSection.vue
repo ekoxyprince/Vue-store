@@ -57,6 +57,7 @@ const dressStyles = ref([
   width: 100%;
   grid-template-columns: repeat(5, 1fr);
   gap: 20px;
+  padding: 20px;
 }
 .grid-item {
   height: 289px;
@@ -80,9 +81,12 @@ const dressStyles = ref([
 @media (max-width: 468px) {
   .grid-container {
     grid-template-columns: 1fr;
+    padding: 10px;
   }
   .grid-item {
+    height: 190px;
     grid-column: span 1 !important;
+    /* background-size: 100% 100% !important; */
   }
 }
 </style>

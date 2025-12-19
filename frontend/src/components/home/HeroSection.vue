@@ -10,8 +10,7 @@
               designed to bring out your individuality and cater to your sense
               of style.
             </p>
-            <PrimaryButton
-              styles="background-color:black; color:#fff; align-self:start;"
+            <PrimaryButton styles="background-color:black; color:#fff;"
               >Shop Now</PrimaryButton
             >
             <div class="write-ups">
@@ -145,6 +144,12 @@ p {
   }
   to {
     translate: -100%;
+  }
+}
+@media (max-width: 468px) {
+  .content-wrapper > h2 {
+    font-size: 34px;
+    line-height: 34px;
   }
 }
 </style>

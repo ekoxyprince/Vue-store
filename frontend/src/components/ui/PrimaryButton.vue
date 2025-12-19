@@ -1,5 +1,5 @@
 <template>
-  <button :style="styles">
+  <button :style="styles" :class="class">
     <slot></slot>
   </button>
 </template>
@@ -8,6 +8,7 @@
 import { defineProps } from "vue";
 defineProps({
   styles: String,
+  class: String,
 });
 </script>
 
@@ -19,6 +20,7 @@ button {
   border-radius: 25px;
   box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.15);
   transition: all 0.53s ease;
+  justify-content: center;
 }
 button:hover {
   opacity: 0.6;
