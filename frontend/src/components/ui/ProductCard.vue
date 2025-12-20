@@ -19,7 +19,7 @@
         />
         <p>{{ product.rating }}/5</p>
       </div>
-      <div>
+      <div class="price-wrapper">
         <p>${{ product.finalPrice }}</p>
       </div>
     </div>
@@ -78,6 +78,11 @@ defineProps({
   font-size: 14px;
   font-weight: 300;
   font-family: "Poppins", sans-serif;
+}
+.price-wrapper {
+  display: flex;
+  gap: 5px;
+  align-items: center;
 }
 
 @media (max-width: 768px) {
