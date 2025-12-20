@@ -176,6 +176,7 @@ p {
 @media (max-width: 468px) {
   .write-ups {
     grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
   }
   .write-ups-item:last-child {
     grid-column: span 2;

@@ -39,7 +39,7 @@ defineProps({
   flex-direction: column;
 }
 .card-img-container {
-  width: 295px;
+  width: 100%;
   height: 298px;
   background-color: #f0eeed;
   border-radius: 20px;
@@ -82,7 +82,6 @@ defineProps({
 
 @media (max-width: 768px) {
   .card-img-container {
-    width: 250px;
     height: 248px;
   }
   .card-content p {
@@ -91,7 +90,6 @@ defineProps({
 }
 @media (max-width: 468px) {
   .card-img-container {
-    width: 200px;
     height: 198px;
   }
   .card-content p {

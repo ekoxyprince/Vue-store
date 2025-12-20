@@ -69,7 +69,7 @@ a:hover {
   opacity: 0.7;
 }
 i {
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 500;
 }
 .search {
