@@ -44,4 +44,9 @@ const rating = ref(4.5);
   font-weight: 400;
   font-family: "Poppins", sans-serif;
 }
+@media (max-width: 468px) {
+  .card {
+    scroll-snap-align: center;
+  }
+}
 </style>

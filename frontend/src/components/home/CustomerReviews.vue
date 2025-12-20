@@ -1,29 +1,46 @@
 <template>
-  <v-container>
-    <div class="head">
-      <h2 class="header">our happy customers</h2>
-      <div class="pagination-wrapper">
-        <i class="pi pi-arrow-left"></i>
-        <i class="pi pi-arrow-right"></i>
+  <section class="section">
+    <v-container>
+      <div class="head">
+        <h2 class="header">our happy customers</h2>
+        <div class="pagination-wrapper">
+          <i @click="slideLeft" class="pi pi-arrow-left"></i>
+          <i @click="slideRight" class="pi pi-arrow-right"></i>
+        </div>
+      </div>
+    </v-container>
+    <div class="carousel">
+      <div class="wrapper">
+        <TestimonyCard />
+        <TestimonyCard />
+        <TestimonyCard />
+        <TestimonyCard />
+        <TestimonyCard />
+        <TestimonyCard />
+        <TestimonyCard />
       </div>
     </div>
-  </v-container>
-  <div class="carousel">
-    <div class="wrapper">
-      <TestimonyCard />
-      <TestimonyCard />
-      <TestimonyCard />
-      <TestimonyCard />
-      <TestimonyCard />
-      <TestimonyCard />
-      <TestimonyCard />
-    </div>
-  </div>
+  </section>
 </template>
 
-<script setup></script>
+<script setup>
+function slideRight() {
+  const slide = document.querySelector(".carousel");
+  const wrapper = document.querySelector(".wrapper");
+  console.log(slide.clientWidth);
+  wrapper.scrollBy({ left: slide.clientWidth, behavior: "smooth" });
+}
+function slideLeft() {
+  const slide = document.querySelector(".carousel");
+  const wrapper = document.querySelector(".wrapper");
+  wrapper.scrollBy({ left: -slide.clientWidth, behavior: "smooth" });
+}
+</script>
 
 <style scoped>
+.section {
+  margin-bottom: 150px;
+}
 .head {
   display: flex;
   font-family: "Poppins", sans-serif;
@@ -63,6 +80,7 @@
   overflow-x: auto;
   scroll-behavior: smooth;
   padding: 0px 10px;
+  scroll-snap-type: x mandatory;
 }
 .wrapper::-webkit-scrollbar {
   display: none;
@@ -72,7 +90,7 @@
   content: "";
   width: 115px;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0);
+  background-color: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(1.2px);
   position: absolute;
   top: 0;
