@@ -28,6 +28,7 @@
       />
     </div>
     <div class="d-flex ga-3">
+      <i v-if="smAndDown" class="pi pi-search"></i>
       <i class="pi pi-shopping-cart"></i>
       <i class="pi pi-user"></i>
     </div>
@@ -81,7 +82,7 @@ i {
 .search-container {
   position: relative;
 }
-.pi-search {
+.search-container > .pi-search {
   position: absolute;
   left: 15px;
   top: 50%;
