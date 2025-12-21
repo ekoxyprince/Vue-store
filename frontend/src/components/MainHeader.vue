@@ -50,7 +50,7 @@
     class="search-drawer"
     :showCloseIcon="false"
     :showHeader="false"
-    style="height: 90vh; border-radius: 20px 20px 0px 0px"
+    style="height: 85vh; border-radius: 20px 20px 0px 0px"
   >
     <div class="search-container" style="flex: 1">
       <i class="pi pi-search"></i>

@@ -199,5 +199,8 @@ p {
   .write-ups-item:nth-child(2)::after {
     display: none;
   }
+  .content-wrapper {
+    margin: 15px 0px;
+  }
 }
 </style>
