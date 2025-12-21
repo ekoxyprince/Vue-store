@@ -28,7 +28,11 @@
       />
     </div>
     <div class="d-flex ga-3">
-      <i v-if="smAndDown" class="pi pi-search"></i>
+      <i
+        @click="searchActive = !searchActive"
+        v-if="smAndDown"
+        class="pi pi-search"
+      ></i>
       <i class="pi pi-shopping-cart"></i>
       <i class="pi pi-user"></i>
     </div>
@@ -38,15 +42,34 @@
     :location="$vuetify.display.mobile ? 'left' : undefined"
     temporary
   >
-    <div>Navigtion</div>
+    <MainSidebar />
   </v-navigation-drawer>
+  <Drawer
+    v-model:visible="searchActive"
+    position="bottom"
+    class="search-drawer"
+    :showCloseIcon="false"
+    :showHeader="false"
+    style="height: 90vh; border-radius: 20px 20px 0px 0px"
+  >
+    <div class="search-container" style="flex: 1">
+      <i class="pi pi-search"></i>
+      <input
+        class="flex-fill w-100 search"
+        type="text"
+        placeholder="Search for products"
+      />
+    </div>
+  </Drawer>
 </template>
 
 <script setup>
 import { useDisplay } from "vuetify";
 import { ref, watch } from "vue";
+import { Drawer } from "primevue";
 const { mdAndUp, smAndDown } = useDisplay();
 const isActive = ref(false);
+const searchActive = ref(false);
 const group = ref(null);
 watch(group, () => {
   isActive.value = false;
@@ -87,5 +110,10 @@ i {
   left: 15px;
   top: 50%;
   transform: translateY(-50%);
+}
+@media (max-width: 468px) {
+  i {
+    font-size: 18px;
+  }
 }
 </style>

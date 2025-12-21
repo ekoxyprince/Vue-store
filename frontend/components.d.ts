@@ -16,6 +16,7 @@ declare module 'vue' {
     HeroSection: typeof import('./src/components/home/HeroSection.vue')['default']
     MainFooter: typeof import('./src/components/MainFooter.vue')['default']
     MainHeader: typeof import('./src/components/MainHeader.vue')['default']
+    MainSidebar: typeof import('./src/components/ui/MainSidebar.vue')['default']
     NewArrivals: typeof import('./src/components/home/NewArrivals.vue')['default']
     PrimaryButton: typeof import('./src/components/ui/PrimaryButton.vue')['default']
     ProductCard: typeof import('./src/components/ui/ProductCard.vue')['default']

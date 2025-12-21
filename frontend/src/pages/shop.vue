@@ -84,6 +84,7 @@ article {
   }
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
   }
 }
 </style>
