@@ -3,10 +3,16 @@
     <div class="card-img-container">
       <div class="card-img-wrapper">
         <v-img class="img" height="100%" :src="product.image" cover></v-img>
+        <button class="add-to-cart-btn">Add to cart</button>
       </div>
     </div>
     <div class="card-content">
-      <p>{{ product.name }}</p>
+      <RouterLink
+        class="name"
+        style="color: #000"
+        :to="`/shop/${product.id}`"
+        >{{ product.name }}</RouterLink
+      >
       <div class="rating-wrapper">
         <v-rating
           hover
@@ -28,6 +34,7 @@
 
 <script setup>
 import { defineProps } from "vue";
+import { RouterLink } from "vue-router";
 defineProps({
   product: Object,
 });
@@ -48,9 +55,32 @@ defineProps({
 .card-img-container:hover .img {
   transform: scale(1.25) !important;
 }
+.card-img-container:hover .add-to-cart-btn,
+.card-img-container:focus-within .add-to-cart-btn {
+  bottom: 20px;
+  opacity: 1;
+}
 .card-img-wrapper {
   width: 100%;
   height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.add-to-cart-btn {
+  position: absolute;
+  bottom: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 100;
+  cursor: pointer;
 }
 .img {
   width: 100%;
@@ -63,7 +93,7 @@ defineProps({
   flex-direction: column;
   gap: 5px;
 }
-.card-content p {
+.name {
   font-size: 20px;
   font-weight: bold;
   font-family: "Poppins", sans-serif;
@@ -89,7 +119,7 @@ defineProps({
   .card-img-container {
     height: 248px;
   }
-  .card-content p {
+  .name {
     font-size: 18px;
   }
 }
@@ -97,7 +127,7 @@ defineProps({
   .card-img-container {
     height: 198px;
   }
-  .card-content p {
+  .name {
     font-size: 15px;
   }
 }

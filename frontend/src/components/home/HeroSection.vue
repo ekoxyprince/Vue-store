@@ -12,9 +12,10 @@
             </p>
             <PrimaryButton
               class="btn"
-              styles="background-color:black; color:#fff;"
-              >Shop Now</PrimaryButton
+              styles="background-color:black; color:#fff !important;"
             >
+              <RouterLink style="color: #fff" to="/shop">Shop Now</RouterLink>
+            </PrimaryButton>
             <div class="write-ups">
               <div class="write-ups-item">
                 <h2>200+</h2>
@@ -172,6 +173,10 @@ p {
   .write-ups-item > h2 {
     font-size: 26px;
   }
+  .brands .img {
+    height: 28px;
+    min-width: 120px;
+  }
 }
 @media (max-width: 468px) {
   .write-ups {
@@ -201,6 +206,9 @@ p {
   }
   .content-wrapper {
     margin: 15px 0px;
+  }
+  .brands .img {
+    min-width: 100px;
   }
 }
 </style>
