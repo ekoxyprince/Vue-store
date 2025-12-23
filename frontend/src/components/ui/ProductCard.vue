@@ -69,8 +69,8 @@ defineProps({
 .add-to-cart-btn {
   position: absolute;
   bottom: -100%;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 10px;
+  right: 10px;
   padding: 10px 20px;
   background-color: #000;
   color: #fff;
