@@ -346,13 +346,9 @@ const pageRef = ref(null);
 const filterRef = ref(null);
 const filterActive = ref(false);
 const range = ref([30000, 1000000]);
-const onPageChange = (event) => {
-  console.log(event.page);
-};
 onMounted(() => {
   window.addEventListener("scroll", (e) => {
     const scrolled = window.scrollY;
-    console.log(scrolled);
     if (scrolled > 151) {
       filterRef.value.classList.add("sticky");
     }

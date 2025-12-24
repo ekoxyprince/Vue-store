@@ -1,8 +1,8 @@
 <template>
-  <div class="card">
+  <div class="card-product">
     <div class="card-img-container">
       <div class="card-img-wrapper">
-        <v-img class="img" height="100%" :src="product.image" cover></v-img>
+        <v-img class="img" height="100%" :src="product.images[0]" cover></v-img>
         <button class="add-to-cart-btn">Add to cart</button>
       </div>
     </div>
@@ -41,7 +41,7 @@ defineProps({
 </script>
 
 <style scoped>
-.card {
+.card-product {
   display: flex;
   flex-direction: column;
 }
@@ -55,8 +55,7 @@ defineProps({
 .card-img-container:hover .img {
   transform: scale(1.25) !important;
 }
-.card-img-container:hover .add-to-cart-btn,
-.card-img-container:focus-within .add-to-cart-btn {
+.card-img-container:hover .add-to-cart-btn {
   bottom: 20px;
   opacity: 1;
 }
@@ -129,6 +128,10 @@ defineProps({
   }
   .name {
     font-size: 15px;
+  }
+  .add-to-cart-btn {
+    bottom: 20px;
+    opacity: 1;
   }
 }
 </style>

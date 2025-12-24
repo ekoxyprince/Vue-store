@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card-testimonial">
     <v-rating
       hover
       :length="5"
@@ -26,7 +26,7 @@ const rating = ref(4.5);
 </script>
 
 <style scoped>
-.card {
+.card-testimonial {
   padding: 20px;
   border-radius: 10px;
   border: 1px solid #ccccccff;
@@ -34,18 +34,18 @@ const rating = ref(4.5);
   flex-direction: column;
   gap: 10px;
 }
-.card h2 {
+.card-testimonial h2 {
   font-size: 20px;
   font-weight: bold;
   font-family: "Poppins", sans-serif;
 }
-.card p {
+.card-testimonial p {
   font-size: 13.5px;
   font-weight: 400;
   font-family: "Poppins", sans-serif;
 }
 @media (max-width: 468px) {
-  .card {
+  .card-testimonial {
     scroll-snap-align: center;
   }
 }

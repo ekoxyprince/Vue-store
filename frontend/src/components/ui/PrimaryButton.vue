@@ -1,15 +1,19 @@
 <template>
-  <button :style="styles" :class="class">
+  <button @click="handleClick" :style="styles" :class="class">
     <slot></slot>
   </button>
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, defineEmits } from "vue";
 defineProps({
   styles: String,
   class: String,
 });
+const emits = defineEmits(["press"]);
+function handleClick() {
+  emits("press");
+}
 </script>
 
 <style scoped>

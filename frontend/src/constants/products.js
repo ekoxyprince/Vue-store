@@ -10,8 +10,12 @@ const products = [
     rating: 4.5,
     reviewsCount: 132,
     inStock: true,
-    image:
+    images: [
       "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?fm=png&w=800",
+      "https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?fm=png&w=800",
+      "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?fm=png&w=800",
+      "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?fm=png&w=800",
+    ],
     description: "Clean and minimal cotton t-shirt for everyday wear.",
   },
   {
@@ -25,8 +29,12 @@ const products = [
     rating: 4.7,
     reviewsCount: 89,
     inStock: true,
-    image:
+    images: [
       "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?fm=png&w=800",
+      "https://images.unsplash.com/photo-1514996937319-344454492b37?fm=png&w=800",
+      "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?fm=png&w=800",
+      "https://images.unsplash.com/photo-1602810316498-ab67cf68c8e1?fm=png&w=800",
+    ],
     description: "Classic denim jacket with a modern fit.",
   },
   {
@@ -40,8 +48,12 @@ const products = [
     rating: 4.6,
     reviewsCount: 201,
     inStock: false,
-    image:
+    images: [
       "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?fm=png&w=800",
+      "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?fm=png&w=800",
+      "https://images.unsplash.com/photo-1520975916090-3105956dac38?fm=png&w=800",
+      "https://images.unsplash.com/photo-1618354691438-25bc04584c23?fm=png&w=800",
+    ],
     description: "Soft fleece hoodie designed for comfort and warmth.",
   },
   {
@@ -55,8 +67,12 @@ const products = [
     rating: 4.3,
     reviewsCount: 76,
     inStock: true,
-    image:
+    images: [
       "https://images.unsplash.com/photo-1542272604-787c3835535d?fm=png&w=800",
+      "https://images.unsplash.com/photo-1516826957135-700dedea698c?fm=png&w=800",
+      "https://images.unsplash.com/photo-1542060748-10c28b62716f?fm=png&w=800",
+      "https://images.unsplash.com/photo-1604176354204-9268737828e4?fm=png&w=800",
+    ],
     description: "Durable slim-fit jeans with stretch fabric.",
   },
   {
@@ -70,8 +86,12 @@ const products = [
     rating: 4.2,
     reviewsCount: 58,
     inStock: true,
-    image:
+    images: [
       "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?fm=png&w=800",
+      "https://images.unsplash.com/photo-1603252109303-2751441dd157?fm=png&w=800",
+      "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?fm=png&w=800",
+      "https://images.unsplash.com/photo-1521334884684-d80222895322?fm=png&w=800",
+    ],
     description: "Lightweight button-up shirt perfect for warm days.",
   },
   {
@@ -85,8 +105,12 @@ const products = [
     rating: 4.5,
     reviewsCount: 119,
     inStock: true,
-    image:
+    images: [
       "https://images.unsplash.com/photo-1593032465171-8e3dcd5b7c6b?fm=png&w=800",
+      "https://images.unsplash.com/photo-1583001809873-a128495da465?fm=png&w=800",
+      "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?fm=png&w=800",
+      "https://images.unsplash.com/photo-1592878849129-7d7c37a4a1e3?fm=png&w=800",
+    ],
     description: "Comfortable joggers suitable for training or lounging.",
   },
   {
@@ -100,8 +124,12 @@ const products = [
     rating: 4.8,
     reviewsCount: 8,
     inStock: true,
-    image:
+    images: [
       "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?fm=png&w=800",
+      "https://images.unsplash.com/photo-1520974735194-6c3f8a3bfa91?fm=png&w=800",
+      "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?fm=png&w=800",
+      "https://images.unsplash.com/photo-1495121605193-b116b5b09c2d?fm=png&w=800",
+    ],
     description: "Elegant summer dress with a clean silhouette.",
   },
   {
@@ -115,8 +143,12 @@ const products = [
     rating: 4.7,
     reviewsCount: 3,
     inStock: true,
-    image:
+    images: [
       "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?fm=png&w=800",
+      "https://images.unsplash.com/photo-1520975693419-b40f1f20f9cc?fm=png&w=800",
+      "https://images.unsplash.com/photo-1542062703-7ef6d1b9b6f2?fm=png&w=800",
+      "https://images.unsplash.com/photo-1601933470096-0e34634ffcde?fm=png&w=800",
+    ],
     description: "Warm wool coat with a timeless design.",
   },
   {
@@ -130,8 +162,12 @@ const products = [
     rating: 4.4,
     reviewsCount: 2,
     inStock: true,
-    image:
+    images: [
       "https://images.unsplash.com/photo-1583001809873-a128495da465?fm=png&w=800",
+      "https://images.unsplash.com/photo-1604176354204-9268737828e4?fm=png&w=800",
+      "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?fm=png&w=800",
+      "https://images.unsplash.com/photo-1593032465171-8e3dcd5b7c6b?fm=png&w=800",
+    ],
     description: "Functional cargo pants with multiple pockets.",
   },
   {
@@ -145,9 +181,108 @@ const products = [
     rating: 4.6,
     reviewsCount: 9,
     inStock: true,
-    image:
+    images: [
       "https://images.unsplash.com/photo-1600185365926-3a2ce3cdb9eb?fm=png&w=800",
+      "https://images.unsplash.com/photo-1618354691438-25bc04584c23?fm=png&w=800",
+      "https://images.unsplash.com/photo-1520975916090-3105956dac38?fm=png&w=800",
+      "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?fm=png&w=800",
+    ],
     description: "Soft knit sweater ideal for cooler days.",
+  },
+  {
+    id: 11,
+    name: "Running Sneakers",
+    brand: "Stride",
+    category: "Shoes",
+    price: 120,
+    discount: 25,
+    finalPrice: 90,
+    rating: 4.6,
+    reviewsCount: 64,
+    inStock: true,
+    images: [
+      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?fm=png&w=800",
+      "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?fm=png&w=800",
+      "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?fm=png&w=800",
+      "https://images.unsplash.com/photo-1603808033192-082d6919d3e1?fm=png&w=800",
+    ],
+    description: "Lightweight sneakers built for everyday running.",
+  },
+  {
+    id: 12,
+    name: "Leather Crossbody Bag",
+    brand: "Urban Carry",
+    category: "Bags",
+    price: 110,
+    discount: 30,
+    finalPrice: 77,
+    rating: 4.7,
+    reviewsCount: 21,
+    inStock: true,
+    images: [
+      "https://images.unsplash.com/photo-1584917865442-de89df76afd3?fm=png&w=800",
+      "https://images.unsplash.com/photo-1594223274512-ad4803739b7c?fm=png&w=800",
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?fm=png&w=800",
+      "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?fm=png&w=800",
+    ],
+    description: "Premium leather crossbody bag for daily essentials.",
+  },
+  {
+    id: 13,
+    name: "Casual Baseball Cap",
+    brand: "Street Gear",
+    category: "Accessories",
+    price: 25,
+    discount: 10,
+    finalPrice: 22.5,
+    rating: 4.2,
+    reviewsCount: 17,
+    inStock: true,
+    images: [
+      "https://images.unsplash.com/photo-1526178611294-3b6a6f9a6f3f?fm=png&w=800",
+      "https://images.unsplash.com/photo-1519741497674-611481863552?fm=png&w=800",
+      "https://images.unsplash.com/photo-1600185365483-26d7f4f93d59?fm=png&w=800",
+      "https://images.unsplash.com/photo-1593032457869-8a4c1d7c0c63?fm=png&w=800",
+    ],
+    description: "Classic baseball cap with adjustable fit.",
+  },
+  {
+    id: 14,
+    name: "Sports Windbreaker",
+    brand: "Motion Wear",
+    category: "Outerwear",
+    price: 90,
+    discount: 20,
+    finalPrice: 72,
+    rating: 4.5,
+    reviewsCount: 33,
+    inStock: true,
+    images: [
+      "https://images.unsplash.com/photo-1520975661595-6453be3f7070?fm=png&w=800",
+      "https://images.unsplash.com/photo-1592878904946-b3cd8ae243d0?fm=png&w=800",
+      "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?fm=png&w=800",
+      "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?fm=png&w=800",
+    ],
+    description: "Lightweight windbreaker for active lifestyles.",
+  },
+  {
+    id: 15,
+    name: "Comfort Slide Sandals",
+    brand: "Ease Walk",
+    category: "Footwear",
+    price: 40,
+    discount: 15,
+    finalPrice: 34,
+    rating: 4.3,
+    reviewsCount: 12,
+    inStock: true,
+    images: [
+      "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?fm=png&w=800",
+      "https://images.unsplash.com/photo-1549298916-b41d501d3772?fm=png&w=800",
+      "https://images.unsplash.com/photo-1603808033192-082d6919d3e1?fm=png&w=800",
+      "https://images.unsplash.com/photo-1600180758890-6b94519a8ba6?fm=png&w=800",
+    ],
+    description: "Comfortable slide sandals for everyday use.",
   },
 ];
 

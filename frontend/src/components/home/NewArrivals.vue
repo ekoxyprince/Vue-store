@@ -13,6 +13,7 @@
       "
     >
       <PrimaryButton
+        @press="handlePress"
         styles="background-color:white; border:1px solid #eee; color:#000;"
         >View All</PrimaryButton
       >
@@ -22,7 +23,12 @@
 
 <script setup>
 import products from "@/constants/products";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const newArrivals = ref(products.filter((d, i) => d.reviewsCount <= 10));
+const handlePress = () => {
+  router.push("/shop");
+};
 </script>
 
 <style scoped>
