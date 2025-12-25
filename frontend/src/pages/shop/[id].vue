@@ -67,9 +67,7 @@
           <v-tabs-window-item value="one">
             <v-sheet>
               <div class="">
-                <p class="para">
-                  {{ product.description }}
-                </p>
+                {{ product?.details }}
               </div>
             </v-sheet>
           </v-tabs-window-item>

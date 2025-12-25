@@ -11,6 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    CartContainer: typeof import('./src/components/ui/CartContainer.vue')['default']
     CustomerReviews: typeof import('./src/components/home/CustomerReviews.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     HeroSection: typeof import('./src/components/home/HeroSection.vue')['default']
@@ -18,6 +19,7 @@ declare module 'vue' {
     MainHeader: typeof import('./src/components/MainHeader.vue')['default']
     MainSidebar: typeof import('./src/components/ui/MainSidebar.vue')['default']
     NewArrivals: typeof import('./src/components/home/NewArrivals.vue')['default']
+    PageTitle: typeof import('./src/components/ui/PageTitle.vue')['default']
     PrimaryButton: typeof import('./src/components/ui/PrimaryButton.vue')['default']
     ProductCard: typeof import('./src/components/ui/ProductCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

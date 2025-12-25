@@ -17,7 +17,7 @@
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/shop">Shop</RouterLink>
       <RouterLink to="/about">About us</RouterLink>
-      <RouterLink href="/contact">Contact us</RouterLink>
+      <RouterLink to="/contact">Contact us</RouterLink>
     </nav>
     <div v-if="mdAndUp" class="search-container" style="flex: 1">
       <i class="pi pi-search"></i>
@@ -33,8 +33,12 @@
         v-if="smAndDown"
         class="pi pi-search"
       ></i>
-      <i class="pi pi-shopping-cart"></i>
-      <i class="pi pi-user"></i>
+      <RouterLink to="/cart">
+        <i class="pi pi-shopping-cart"></i>
+      </RouterLink>
+      <RouterLink to="/user">
+        <i class="pi pi-user"></i>
+      </RouterLink>
     </div>
   </V-container>
   <v-navigation-drawer

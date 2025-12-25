@@ -1,0 +1,126 @@
+<template>
+  <div class="cart-container">
+    <div class="cart-image-container">
+      <v-img class="cart-image" :src="image" />
+    </div>
+    <div class="cart-details">
+      <div class="cart-details-row">
+        <h2>Leather Crossbody Bag</h2>
+        <i style="color: red" class="pi pi-trash"></i>
+      </div>
+      <div class="cart-details-row">
+        <h1>$120.00</h1>
+        <div class="input-wrapper">
+          <i @click="decreaseCount" class="pi pi-minus"></i>
+          <input v-model="quantity" type="number" />
+          <i @click="increaseCount" class="pi pi-plus"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import image from "@/assets/hero-1.png";
+const quantity = ref(1);
+const increaseCount = () => {
+  if (quantity.value < 100) {
+    quantity.value += 1;
+  }
+};
+const decreaseCount = () => {
+  if (quantity.value > 1) {
+    quantity.value -= 1;
+  }
+};
+</script>
+
+<style scoped>
+.cart-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #cdcdcdff;
+}
+.cart-container:last-child {
+  border-bottom: none;
+}
+.cart-image-container {
+  width: 140px;
+  height: 100px;
+  background-color: #f0eeed;
+  border-radius: 15px;
+  overflow: hidden;
+}
+.cart-image {
+  width: 100%;
+  height: 100%;
+}
+.cart-details {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  align-self: stretch;
+  width: 100%;
+}
+.cart-details-row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.cart-details-row:last-child {
+  margin-top: auto;
+}
+
+.cart-details-row h2 {
+  font-size: 20px;
+  font-weight: bold;
+  font-family: "Poppins", sans-serif;
+}
+.cart-details-row h1 {
+  font-size: 22px;
+  font-weight: bold;
+  font-family: "Poppins", sans-serif;
+}
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  width: max-content;
+  border-radius: 15px;
+  height: 30px;
+  background-color: #f1f1f1ff;
+}
+.input-wrapper i {
+  padding: 2px 10px;
+}
+.input-wrapper input {
+  max-width: 40px;
+  text-align: center;
+  outline: none;
+  border: none;
+}
+@media (max-width: 768px) {
+  .cart-details-row h2 {
+    font-size: 17px;
+  }
+  .cart-details-row h1 {
+    font-size: 19px;
+  }
+}
+@media (max-width: 468px) {
+  .cart-image-container {
+    width: 100px;
+    height: 80px;
+  }
+  .cart-details-row h2 {
+    font-size: 15px;
+  }
+  .cart-details-row h1 {
+    font-size: 17px;
+  }
+}
+</style>
