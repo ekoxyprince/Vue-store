@@ -57,9 +57,7 @@
               <RouterLink class="route-link" to="/signin">Signin</RouterLink>
             </li>
             <li>
-              <RouterLink class="route-link" to="/register"
-                >Register</RouterLink
-              >
+              <RouterLink class="route-link" to="/signup">Register</RouterLink>
             </li>
           </ul>
         </div>

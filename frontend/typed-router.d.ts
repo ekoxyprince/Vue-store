@@ -22,8 +22,12 @@ declare module 'vue-router/auto-routes' {
     '/about': RouteRecordInfo<'/about', '/about', Record<never, never>, Record<never, never>>,
     '/cart': RouteRecordInfo<'/cart', '/cart', Record<never, never>, Record<never, never>>,
     '/contact': RouteRecordInfo<'/contact', '/contact', Record<never, never>, Record<never, never>>,
+    '/reset-password/': RouteRecordInfo<'/reset-password/', '/reset-password', Record<never, never>, Record<never, never>>,
+    '/reset-password/[token]': RouteRecordInfo<'/reset-password/[token]', '/reset-password/:token', { token: ParamValue<true> }, { token: ParamValue<false> }>,
     '/shop/': RouteRecordInfo<'/shop/', '/shop', Record<never, never>, Record<never, never>>,
     '/shop/[id]': RouteRecordInfo<'/shop/[id]', '/shop/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
+    '/signin': RouteRecordInfo<'/signin', '/signin', Record<never, never>, Record<never, never>>,
+    '/signup': RouteRecordInfo<'/signup', '/signup', Record<never, never>, Record<never, never>>,
   }
 
   /**
@@ -53,12 +57,28 @@ declare module 'vue-router/auto-routes' {
       routes: '/contact'
       views: never
     }
+    'src/pages/reset-password/index.vue': {
+      routes: '/reset-password/'
+      views: never
+    }
+    'src/pages/reset-password/[token].vue': {
+      routes: '/reset-password/[token]'
+      views: never
+    }
     'src/pages/shop/index.vue': {
       routes: '/shop/'
       views: never
     }
     'src/pages/shop/[id].vue': {
       routes: '/shop/[id]'
+      views: never
+    }
+    'src/pages/signin.vue': {
+      routes: '/signin'
+      views: never
+    }
+    'src/pages/signup.vue': {
+      routes: '/signup'
       views: never
     }
   }

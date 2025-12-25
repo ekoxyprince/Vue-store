@@ -15,17 +15,25 @@
         <v-col cols="12" md="6">
           <h2>Send us a Message</h2>
           <form action="#" method="post">
-            <div class="mb-4">
-              <label for="name">Name</label>
+            <div class="mb-1 form-group">
               <input type="text" id="name" class="form-control" />
+              <label for="name">Name</label>
             </div>
-            <div class="mb-4">
-              <label for="email">Email</label>
+            <div class="mb-1 form-group">
+              <input type="text" id="phone" class="form-control" />
+              <label for="phone">Phone</label>
+            </div>
+            <div class="mb-1 form-group">
               <input type="email" id="email" class="form-control" />
+              <label for="email">Email</label>
             </div>
-            <div class="mb-4">
-              <label for="message">Message</label>
-              <textarea id="message" class="form-control"></textarea>
+            <div class="mb-1 form-group">
+              <textarea
+                id="message"
+                placeholder=" Enter Message Here..."
+                class="form-control"
+              >
+              </textarea>
             </div>
             <PrimaryButton
               styles="width: 100%;background-color:#000; color:#fff;"
@@ -65,13 +73,34 @@ form label {
   margin-bottom: 0.5rem;
   font-family: "Poppins", sans-serif;
 }
+.form-group {
+  position: relative;
+  height: 100%;
+}
+.form-group label {
+  position: absolute;
+  top: 20%;
+  left: 20px;
+  z-index: 100;
+  background-color: #fff;
+  padding: 0 5px;
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
 form .form-control {
   width: 100%;
   padding: 0.5rem;
   margin-bottom: 1rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 10px;
   font-family: "Poppins", sans-serif;
+  outline: none;
+}
+form .form-control:focus + label {
+  font-size: 12px;
+  font-weight: 500;
+  top: 0%;
+  transform: translateY(-4px);
 }
 form .btn {
   background-color: #007bff;

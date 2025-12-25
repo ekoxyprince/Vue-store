@@ -27,6 +27,10 @@
       </div>
       <div class="price-wrapper">
         <p>${{ product.finalPrice }}</p>
+        <p style="text-decoration: line-through; color: #888">
+          ${{ product.price }}
+        </p>
+        <div class="discount-wrapper">{{ product.discount }}%</div>
       </div>
     </div>
   </div>
@@ -113,7 +117,20 @@ defineProps({
   gap: 5px;
   align-items: center;
 }
-
+.price-wrapper p {
+  font-size: 18px;
+  font-weight: bold;
+  font-family: "Poppins", sans-serif;
+}
+.discount-wrapper {
+  background-color: rgba(255, 51, 51, 0.2);
+  color: #ff3333;
+  padding: 5px 15px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+}
 @media (max-width: 768px) {
   .card-img-container {
     height: 248px;
