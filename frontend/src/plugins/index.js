@@ -11,6 +11,8 @@ import router from "@/router";
 import PrimeVue from "primevue/config";
 import Aura from "@primeuix/themes/aura";
 
+import AnimateOnScroll from "primevue/animateonscroll";
+
 export function registerPlugins(app) {
   app
     .use(vuetify)
@@ -20,5 +22,6 @@ export function registerPlugins(app) {
       theme: {
         preset: Aura,
       },
-    });
+    })
+    .directive("animateonscroll", AnimateOnScroll);
 }

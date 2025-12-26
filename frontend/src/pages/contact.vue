@@ -48,7 +48,10 @@
 </template>
 
 <script setup>
-import PageTitle from "@/components/ui/PageTitle.vue";
+import { onMounted } from "vue";
+onMounted(() => {
+  window.scrollTo(0, 0);
+});
 </script>
 
 <style scoped>
@@ -101,17 +104,5 @@ form .form-control:focus + label {
   font-weight: 500;
   top: 0%;
   transform: translateY(-4px);
-}
-form .btn {
-  background-color: #007bff;
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-family: "Poppins", sans-serif;
-}
-form .btn:hover {
-  background-color: #0056b3;
 }
 </style>

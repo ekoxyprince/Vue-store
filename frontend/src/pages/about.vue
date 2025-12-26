@@ -33,6 +33,10 @@
 <script setup>
 import PageTitle from "@/components/ui/PageTitle.vue";
 import bg from "@/assets/bg.jpg";
+import { onMounted } from "vue";
+onMounted(() => {
+  window.scrollTo(0, 0);
+});
 </script>
 
 <style scoped>

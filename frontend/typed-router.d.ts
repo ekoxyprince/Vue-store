@@ -28,6 +28,7 @@ declare module 'vue-router/auto-routes' {
     '/shop/[id]': RouteRecordInfo<'/shop/[id]', '/shop/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/signin': RouteRecordInfo<'/signin', '/signin', Record<never, never>, Record<never, never>>,
     '/signup': RouteRecordInfo<'/signup', '/signup', Record<never, never>, Record<never, never>>,
+    '/user/': RouteRecordInfo<'/user/', '/user', Record<never, never>, Record<never, never>>,
   }
 
   /**
@@ -79,6 +80,10 @@ declare module 'vue-router/auto-routes' {
     }
     'src/pages/signup.vue': {
       routes: '/signup'
+      views: never
+    }
+    'src/pages/user/index.vue': {
+      routes: '/user/'
       views: never
     }
   }

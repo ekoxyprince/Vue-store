@@ -1,12 +1,6 @@
 <template>
   <div class="wrapper">
-    <h2
-      pAnimateOnScroll
-      enterClass="animate-enter fade-in-10 slide-in-from-l-8 animate-duration-1000"
-      leaveClass="animate-leave fade-out-0"
-    >
-      {{ title }}
-    </h2>
+    <h2>{{ title }}</h2>
   </div>
 </template>
 <script setup>

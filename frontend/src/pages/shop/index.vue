@@ -359,6 +359,7 @@ onMounted(() => {
       filterRef.value.classList.remove("sticky");
     }
   });
+  window.scrollTo(0, 0);
 });
 </script>
 

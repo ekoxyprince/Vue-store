@@ -131,6 +131,7 @@ const decreaseCount = () => {
 let interval;
 onMounted(() => {
   interval = setInterval(animateImages, 2000);
+  window.scrollTo(0, 0);
 });
 onUnmounted(() => {
   clearInterval(interval);

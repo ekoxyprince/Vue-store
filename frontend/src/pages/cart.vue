@@ -49,7 +49,10 @@
   </main>
 </template>
 <script setup>
-import CartContainer from "@/components/ui/CartContainer.vue";
+import { onMounted } from "vue";
+onMounted(() => {
+  window.scrollTo(0, 0);
+});
 </script>
 
 <style scoped>
