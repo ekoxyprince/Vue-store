@@ -20,6 +20,10 @@ declare module 'vue-router/auto-routes' {
   export interface RouteNamedMap {
     '/': RouteRecordInfo<'/', '/', Record<never, never>, Record<never, never>>,
     '/about': RouteRecordInfo<'/about', '/about', Record<never, never>, Record<never, never>>,
+    '/admin/dashboard': RouteRecordInfo<'/admin/dashboard', '/admin/dashboard', Record<never, never>, Record<never, never>>,
+    '/admin/orders': RouteRecordInfo<'/admin/orders', '/admin/orders', Record<never, never>, Record<never, never>>,
+    '/admin/products': RouteRecordInfo<'/admin/products', '/admin/products', Record<never, never>, Record<never, never>>,
+    '/admin/users': RouteRecordInfo<'/admin/users', '/admin/users', Record<never, never>, Record<never, never>>,
     '/cart': RouteRecordInfo<'/cart', '/cart', Record<never, never>, Record<never, never>>,
     '/contact': RouteRecordInfo<'/contact', '/contact', Record<never, never>, Record<never, never>>,
     '/reset-password/': RouteRecordInfo<'/reset-password/', '/reset-password', Record<never, never>, Record<never, never>>,
@@ -48,6 +52,22 @@ declare module 'vue-router/auto-routes' {
     }
     'src/pages/about.vue': {
       routes: '/about'
+      views: never
+    }
+    'src/pages/admin/dashboard.vue': {
+      routes: '/admin/dashboard'
+      views: never
+    }
+    'src/pages/admin/orders.vue': {
+      routes: '/admin/orders'
+      views: never
+    }
+    'src/pages/admin/products.vue': {
+      routes: '/admin/products'
+      views: never
+    }
+    'src/pages/admin/users.vue': {
+      routes: '/admin/users'
       views: never
     }
     'src/pages/cart.vue': {

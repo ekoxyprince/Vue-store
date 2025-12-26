@@ -11,8 +11,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AdminSidebar: typeof import('./src/components/ui/AdminSidebar.vue')['default']
     CartContainer: typeof import('./src/components/ui/CartContainer.vue')['default']
     CustomerReviews: typeof import('./src/components/home/CustomerReviews.vue')['default']
+    DashboardCard: typeof import('./src/components/ui/DashboardCard.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     HeroSection: typeof import('./src/components/home/HeroSection.vue')['default']
     MainFooter: typeof import('./src/components/MainFooter.vue')['default']

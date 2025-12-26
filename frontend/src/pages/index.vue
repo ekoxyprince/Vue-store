@@ -1,3 +1,10 @@
+<route lang="json">
+{
+  "meta": {
+    "layout": "main"
+  }
+}
+</route>
 <template>
   <HeroSection />
   <NewArrivals />
