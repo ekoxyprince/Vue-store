@@ -53,7 +53,8 @@ const isActive = ref(false);
 }
 .sidebar {
   width: 100%;
-  height: calc(100vh - 80px);
+  height: 100%;
+  min-height: calc(100vh - 80px);
   background-color: #eaeaeaff;
 }
 @media (max-width: 959px) {

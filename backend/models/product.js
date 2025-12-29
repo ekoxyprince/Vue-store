@@ -1,8 +1,8 @@
 import { database } from "../config/db.js";
 import Sequelize from "sequelize";
 
-const User = database.define(
-  "user",
+const Product = database.define(
+  "product",
   {
     id: {
       type: Sequelize.INTEGER,
@@ -10,38 +10,40 @@ const User = database.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    fullname: {
+    name: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    email: {
+    price: {
+      type: Sequelize.DECIMAL(14, 4),
+      allowNull: false,
+    },
+    finalPrice: {
+      type: Sequelize.DECIMAL(14, 4),
+      allowNull: false,
+    },
+    discount: {
+      type: Sequelize.DECIMAL(14, 4),
+      allowNull: false,
+    },
+    description: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    password: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    phone: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    role: {
-      type: Sequelize.ENUM(["user", "admin"]),
-      allowNull: false,
-      defaultValue: "user",
-    },
-    address: {
-      type: Sequelize.STRING,
-      allowNull: false,
-    },
-    resetPasswordToken: {
-      type: Sequelize.STRING,
+    details: {
+      type: Sequelize.STRING(1024),
       allowNull: true,
     },
-    resetPasswordExpires: {
-      type: Sequelize.DATE,
-      allowNull: true,
+    stockCount: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+    category: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    brand: {
+      type: Sequelize.STRING,
     },
   },
   {
@@ -49,4 +51,4 @@ const User = database.define(
   }
 );
 
-export default User;
+export default Product;

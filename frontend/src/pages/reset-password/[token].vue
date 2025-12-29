@@ -8,13 +8,30 @@
 <template>
   <main>
     <v-container>
-      <form action="#" method="post">
+      <form action="#" @submit="handleClick" method="post">
         <h2>Enter new password</h2>
         <div class="form-group">
-          <input type="password" id="password" class="form-control" />
+          <input
+            v-model="password"
+            type="password"
+            id="password"
+            class="form-control"
+          />
           <label for="password">Password</label>
         </div>
-        <PrimaryButton styles="width: 100%;background-color:#000; color:#fff;">
+        <div class="form-group">
+          <input
+            v-model="cpassword"
+            type="password"
+            id="cpassword"
+            class="form-control"
+          />
+          <label for="cpassword">Confirm Password</label>
+        </div>
+        <PrimaryButton
+          :isDisable="isPending"
+          styles="width: 100%;background-color:#000; color:#fff;"
+        >
           Reset Password
         </PrimaryButton>
       </form>
@@ -23,9 +40,49 @@
 </template>
 <script setup>
 import { onMounted } from "vue";
+import { useMutation } from "@tanstack/vue-query";
+import toast from "vue3-hot-toast";
+import AuthService from "@/services/AuthService";
+import { useRoute } from "vue-router";
+
+const isPending = ref(false);
+const route = useRoute();
+const password = ref("");
+const cpassword = ref("");
+const mutation = useMutation({
+  mutationFn: AuthService.resetPassword,
+  onSuccess: (resp) => {
+    console.log(resp);
+    toast.success("Password updated");
+  },
+  onError: (error) => {
+    toast.error(error.message);
+  },
+});
 onMounted(() => {
   window.scrollTo(0, 0);
 });
+async function handleClick(e) {
+  e.preventDefault();
+  if (password.value.length < 1) {
+    return toast.error("password must be atleast 8 character long");
+  }
+  if (password.value != cpassword.value) {
+    return toast.error("password do not match");
+  }
+  isPending.value = true;
+  await mutation.mutateAsync(
+    {
+      token: route.params.token,
+      password: password.value,
+    },
+    {
+      onSettled: (resp) => {
+        isPending.value = false;
+      },
+    }
+  );
+}
 </script>
 <style scoped>
 main {

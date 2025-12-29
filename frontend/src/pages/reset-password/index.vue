@@ -8,13 +8,16 @@
 <template>
   <main>
     <v-container>
-      <form action="#" method="post">
+      <form @submit="handleClick" action="#" method="post">
         <h2>Reset your password</h2>
         <div class="mb-4 form-group">
-          <input type="text" id="name" class="form-control" />
-          <label for="name">Email</label>
+          <input v-model="email" type="email" id="email" class="form-control" />
+          <label for="email">Email</label>
         </div>
-        <PrimaryButton styles="width: 100%;background-color:#000; color:#fff;">
+        <PrimaryButton
+          :isDisable="isPending"
+          styles="width: 100%;background-color:#000; color:#fff;"
+        >
           Reset Password
         </PrimaryButton>
       </form>
@@ -23,9 +26,39 @@
 </template>
 <script setup>
 import { onMounted } from "vue";
+import { useMutation } from "@tanstack/vue-query";
+import toast from "vue3-hot-toast";
+import AuthService from "@/services/AuthService";
+
+const isPending = ref(false);
+const email = ref("");
+const mutation = useMutation({
+  mutationFn: AuthService.forgotPassword,
+  onSuccess: (resp) => {
+    console.log(resp);
+    toast.success("Password reset link sent");
+  },
+  onError: (error) => {
+    toast.error(error.message);
+  },
+});
 onMounted(() => {
   window.scrollTo(0, 0);
 });
+async function handleClick(e) {
+  isPending.value = true;
+  e.preventDefault();
+  await mutation.mutateAsync(
+    {
+      email: email.value,
+    },
+    {
+      onSettled: (resp) => {
+        isPending.value = false;
+      },
+    }
+  );
+}
 </script>
 <style scoped>
 main {

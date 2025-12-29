@@ -32,6 +32,18 @@
       <i class="pi pi-shopping-cart"></i>
       Orders
     </RouterLink>
+    <RouterLink
+      class="side-link"
+      active-class="side-link-active"
+      to="/admin/coupons"
+    >
+      <i class="pi pi-tag"></i>
+      Coupons
+    </RouterLink>
+    <button class="side-link side-link-logout">
+      <i class="pi pi-sign-out"></i>
+      Logout
+    </button>
   </aside>
 </template>
 
@@ -44,6 +56,8 @@ aside {
   flex: 1;
   flex-direction: column;
   gap: 5px;
+  position: relative;
+  height: 100%;
 }
 .side-link {
   width: 100%;
@@ -63,5 +77,12 @@ aside {
   background-color: #000;
   border-left: 8px solid #d27070ff;
   color: #fff;
+}
+.side-link-logout {
+  position: absolute;
+  bottom: 10px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }
 </style>

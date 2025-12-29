@@ -6,10 +6,10 @@
 }
 </route>
 <template>
-  <v-breadcrumbs :items="['admin', 'orders']"></v-breadcrumbs>
+  <v-breadcrumbs :items="['admin', 'coupons']"></v-breadcrumbs>
   <v-row>
     <v-col cols="12" lg="12">
-      <h2>Orders</h2>
+      <h2>Coupons</h2>
       <v-responsive>
         <div class="table-wrapper">
           <v-data-table-server

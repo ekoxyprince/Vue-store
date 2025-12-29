@@ -8,11 +8,11 @@
 <template>
   <main>
     <v-container>
-      <form action="#" method="post">
+      <form action="#" @submit="handleClick" method="post">
         <h2>Sign in to your account</h2>
         <div class="mb-4 form-group">
-          <input type="text" id="name" class="form-control" />
-          <label for="name">Email</label>
+          <input v-model="email" type="email" id="name" class="form-control" />
+          <label for="email">Email</label>
         </div>
         <div
           style="
@@ -25,6 +25,7 @@
         >
           <div class="form-group">
             <input
+              v-model="password"
               style="margin-bottom: 0px"
               type="password"
               id="phone"
@@ -34,7 +35,10 @@
           </div>
           <RouterLink to="/reset-password">Forget Password?</RouterLink>
         </div>
-        <PrimaryButton styles="width: 100%;background-color:#000; color:#fff;">
+        <PrimaryButton
+          :isDisable="isPending"
+          styles="width: 100%;background-color:#000; color:#fff;"
+        >
           Signin
         </PrimaryButton>
         <div class="signup-wrapper">
@@ -47,9 +51,54 @@
 </template>
 <script setup>
 import { onMounted } from "vue";
+import { useMutation } from "@tanstack/vue-query";
+import toast from "vue3-hot-toast";
+import AuthService from "@/services/AuthService";
+import { useAuthStore } from "@/stores/auth";
+import { useRouter } from "vue-router";
+
+const auth = useAuthStore();
+const router = useRouter();
+const isPending = ref(false);
+const email = ref("");
+const password = ref("");
+const mutation = useMutation({
+  mutationFn: AuthService.signin,
+  onSuccess: (resp) => {
+    console.log(resp);
+    toast.success("signin successful");
+  },
+  onError: (error) => {
+    toast.error(error.message);
+  },
+});
 onMounted(() => {
   window.scrollTo(0, 0);
 });
+async function handleClick(e) {
+  isPending.value = true;
+  e.preventDefault();
+  await mutation.mutateAsync(
+    {
+      email: email.value,
+      password: password.value,
+    },
+    {
+      onSettled: (resp) => {
+        if (resp) {
+          const { token, ...user } = resp.data;
+          auth.login(token, user);
+          if (user.role == "admin") {
+            router.push("/admin/dashboard");
+          } else {
+            router.push("/user");
+          }
+        }
+        isPending.value = false;
+      },
+    }
+  );
+}
 </script>
 <style scoped>
 main {

@@ -9,32 +9,46 @@
 <template>
   <main>
     <v-container>
-      <form action="#" method="post">
+      <form @submit="handleClick" action="#" method="post">
         <h2>Register Account</h2>
         <div class="form-group">
-          <input type="text" id="name" class="form-control" />
-          <label for="name">Fullname</label>
+          <input
+            v-model="fullname"
+            type="text"
+            id="fullname"
+            class="form-control"
+          />
+          <label for="fullname">Fullname</label>
         </div>
         <div class="form-group">
-          <input type="text" id="email" class="form-control" />
+          <input v-model="email" type="email" id="email" class="form-control" />
           <label for="email">Email</label>
         </div>
         <div class="form-group">
-          <input type="text" id="email" class="form-control" />
-          <label for="email">Phone</label>
+          <input v-model="phone" type="text" id="phone" class="form-control" />
+          <label for="phone">Phone</label>
         </div>
         <div class="form-group">
-          <input type="password" id="phone" class="form-control" />
-          <label for="phone">Password</label>
+          <input
+            v-model="password"
+            type="password"
+            id="password"
+            class="form-control"
+          />
+          <label for="password">Password</label>
         </div>
         <div class="mb-1 form-group">
           <textarea
             id="message"
+            v-model="address"
             placeholder=" Enter Address"
             class="form-control"
           ></textarea>
         </div>
-        <PrimaryButton styles="width: 100%;background-color:#000; color:#fff;">
+        <PrimaryButton
+          :isDisable="isPending"
+          styles="width: 100%;background-color:#000; color:#fff;"
+        >
           Signup
         </PrimaryButton>
         <div class="signup-wrapper">
@@ -47,6 +61,56 @@
 </template>
 <script setup>
 import { onMounted } from "vue";
+import { useMutation } from "@tanstack/vue-query";
+import toast from "vue3-hot-toast";
+import AuthService from "@/services/AuthService";
+import { useAuthStore } from "@/stores/auth";
+import { useRouter } from "vue-router";
+
+const auth = useAuthStore();
+const router = useRouter();
+const isPending = ref(false);
+const fullname = ref("");
+const email = ref("");
+const password = ref("");
+const phone = ref("");
+const address = ref("");
+const mutation = useMutation({
+  mutationFn: AuthService.signup,
+  onSuccess: (resp) => {
+    console.log(resp);
+    toast.success("signup successful");
+  },
+  onError: (error) => {
+    toast.error(error.message);
+  },
+});
+onMounted(() => {
+  window.scrollTo(0, 0);
+});
+async function handleClick(e) {
+  isPending.value = true;
+  e.preventDefault();
+  await mutation.mutateAsync(
+    {
+      email: email.value,
+      password: password.value,
+      phone: phone.value,
+      address: address.value,
+      fullname: fullname.value,
+    },
+    {
+      onSettled: (resp) => {
+        if (resp) {
+          const { token, ...user } = resp.data;
+          auth.login(token, user);
+          router.push("/user");
+        }
+        isPending.value = false;
+      },
+    }
+  );
+}
 onMounted(() => {
   window.scrollTo(0, 0);
 });

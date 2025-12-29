@@ -1,14 +1,32 @@
 <template>
-  <button @click="handleClick" :style="styles" :class="class">
-    <slot></slot>
+  <button
+    :disabled="isDisable"
+    @click="handleClick"
+    :style="styles"
+    :class="class"
+  >
+    <template v-if="isDisable">
+      <ProgressSpinner
+        style="height: 30px; width: 40px; padding: 0; margin: 0"
+      />
+    </template>
+    <template v-else>
+      <slot />
+    </template>
   </button>
 </template>
 
 <script setup>
 import { defineProps, defineEmits } from "vue";
+import ProgressSpinner from "primevue/progressspinner";
+
 defineProps({
   styles: String,
   class: String,
+  isDisable: {
+    type: Boolean,
+    default: false,
+  },
 });
 const emits = defineEmits(["press"]);
 function handleClick() {

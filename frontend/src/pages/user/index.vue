@@ -1,7 +1,9 @@
 <route lang="json">
 {
   "meta": {
-    "layout": "main"
+    "layout": "main",
+    "requireAuth": true,
+    "role": "user"
   }
 }
 </route>
@@ -33,33 +35,51 @@
             value="option-3"
             class="mb-4"
           ></v-tab>
-          <button style="color: red">Logout</button>
+          <button @click="handleLogout" style="color: red">Logout</button>
         </v-tabs>
 
         <v-tabs-window v-model="tab">
           <v-tabs-window-item value="option-1">
             <div class="form" action="#" method="post">
               <div class="form-group">
-                <input type="text" id="name" class="form-control" />
-                <label for="name">Fullname</label>
+                <input
+                  v-model="details.fullname"
+                  type="text"
+                  id="name"
+                  class="form-control"
+                />
               </div>
               <div class="form-group">
-                <input type="text" id="email" class="form-control" />
-                <label for="email">Email</label>
+                <input
+                  v-model="details.email"
+                  type="text"
+                  id="email"
+                  class="form-control"
+                  readonly
+                />
               </div>
               <div class="form-group">
-                <input type="text" id="email" class="form-control" />
-                <label for="email">Phone</label>
+                <input
+                  v-model="details.phone"
+                  type="text"
+                  id="email"
+                  class="form-control"
+                />
               </div>
               <div class="mb-1 form-group">
                 <textarea
                   id="message"
+                  v-model="details.address"
                   placeholder=" Enter Address"
                   class="form-control"
                 ></textarea>
               </div>
             </div>
-            <PrimaryButton styles="background-color:#000; color:#fff;">
+            <PrimaryButton
+              :isDisable="isPending"
+              @press="handleClick"
+              styles="background-color:#000; color:#fff;"
+            >
               Save Changes
             </PrimaryButton>
           </v-tabs-window-item>
@@ -68,19 +88,38 @@
             <v-card flat>
               <div class="form" action="#" method="post">
                 <div class="form-group">
-                  <input type="password" id="cpassword" class="form-control" />
+                  <input
+                    v-model="password.currentPassword"
+                    type="password"
+                    id="cpassword"
+                    class="form-control"
+                  />
                   <label for="cpassword">Current Password</label>
                 </div>
                 <div class="form-group">
-                  <input type="password" id="npassword" class="form-control" />
+                  <input
+                    v-model="password.newPassword"
+                    type="password"
+                    id="npassword"
+                    class="form-control"
+                  />
                   <label for="npassword">New Password</label>
                 </div>
                 <div class="form-group">
-                  <input type="password" id="passwordc" class="form-control" />
+                  <input
+                    v-model="password.confirmPassword"
+                    type="password"
+                    id="passwordc"
+                    class="form-control"
+                  />
                   <label for="passwordc">Confirm New Password</label>
                 </div>
               </div>
-              <PrimaryButton styles="background-color:#000; color:#fff;">
+              <PrimaryButton
+                @press="handlePasswordUpdate"
+                :isDisable="isPasswordPending"
+                styles="background-color:#000; color:#fff;"
+              >
                 Update Password
               </PrimaryButton>
             </v-card>
@@ -143,7 +182,70 @@
 <script setup>
 const tab = ref("option-1");
 import { useDisplay } from "vuetify";
+import { useAuthStore } from "@/stores/auth";
+import { useMutation } from "@tanstack/vue-query";
+import toast from "vue3-hot-toast";
+import UserService from "@/services/UserService";
+import { useRouter } from "vue-router";
+
+const auth = useAuthStore();
+const router = useRouter();
+const isPending = ref(false);
+const isPasswordPending = ref(false);
 const { mdAndUp } = useDisplay();
+const details = ref(auth.details);
+const password = ref({
+  currentPassword: "",
+  newPassword: "",
+  confirmPassword: "",
+});
+const updateUsermutation = useMutation({
+  mutationFn: UserService.updateUserDetails,
+  onSuccess: (resp) => {
+    toast.success("Details updated succesfully");
+  },
+  onError: (error) => {
+    toast.error(error.message);
+  },
+});
+const updatePasswordmutation = useMutation({
+  mutationFn: UserService.updateUserPassword,
+  onSuccess: (resp) => {
+    toast.success("Password updated succesfully");
+  },
+  onError: (error) => {
+    toast.error(error.message);
+  },
+});
+async function handleClick(e) {
+  isPending.value = true;
+  await updateUsermutation.mutateAsync(details.value, {
+    onSettled: (resp) => {
+      if (resp) {
+        auth.updateDetails(resp.data);
+      }
+      isPending.value = false;
+    },
+  });
+}
+async function handlePasswordUpdate(e) {
+  if (password.value.newPassword.length < 8) {
+    return toast.error("password must be atleast 8 character long");
+  }
+  if (password.value.newPassword != password.value.confirmPassword) {
+    return toast.error("password do not match");
+  }
+  isPasswordPending.value = true;
+  await updatePasswordmutation.mutateAsync(password.value, {
+    onSettled: (resp) => {
+      isPasswordPending.value = false;
+    },
+  });
+}
+function handleLogout() {
+  auth.logout();
+  router.replace("/signin");
+}
 </script>
 
 <style scoped>
