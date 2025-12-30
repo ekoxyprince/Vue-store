@@ -5,14 +5,22 @@
     </div>
     <div class="cart-details">
       <div class="cart-details-row">
-        <h2>Leather Crossbody Bag</h2>
-        <i style="color: red" class="pi pi-trash"></i>
+        <h2>{{ item.product.name }}</h2>
+        <v-btn
+          icon
+          size="small"
+          variant="text"
+          color="#000"
+          @click="removeFromCart.call(this, item.product)"
+        >
+          <i @click="" style="color: red" class="pi pi-trash"></i>
+        </v-btn>
       </div>
       <div class="cart-details-row">
-        <h1>$120.00</h1>
+        <h1>₦{{ Number(item.product.finalPrice).toLocaleString("en-us") }}</h1>
         <div class="input-wrapper">
           <i @click="decreaseCount" class="pi pi-minus"></i>
-          <input v-model="quantity" type="number" />
+          <input v-model="props.item.quantity" type="number" readonly />
           <i @click="increaseCount" class="pi pi-plus"></i>
         </div>
       </div>
@@ -22,17 +30,29 @@
 
 <script setup>
 import image from "@/assets/hero-1.png";
+import { useCartStore } from "@/stores/cart";
+import toast from "vue3-hot-toast";
+const cart = useCartStore();
 const quantity = ref(1);
+const props = defineProps({
+  item: {
+    type: Object,
+  },
+});
 const increaseCount = () => {
-  if (quantity.value < 100) {
-    quantity.value += 1;
+  if (props.item.quantity < props.item.product.stockCount) {
+    cart.increaseQuantity(props.item.product.id);
   }
 };
 const decreaseCount = () => {
-  if (quantity.value > 1) {
-    quantity.value -= 1;
+  if (props.item.quantity > 1) {
+    cart.decreaseQuantity(props.item.product.id);
   }
 };
+function removeFromCart(product) {
+  cart.removeFromCart(product);
+  toast.success("removed from cart");
+}
 </script>
 
 <style scoped>
@@ -70,6 +90,7 @@ const decreaseCount = () => {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 .cart-details-row:last-child {
   margin-top: auto;

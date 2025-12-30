@@ -12,29 +12,36 @@
       <h2 class="header">Your Cart</h2>
       <div class="card-wrapper">
         <div class="cart-items-wrapper">
-          <CartContainer />
-          <CartContainer />
-          <CartContainer />
+          <div
+            style="display: flex; justify-content: center; font-size: 16px"
+            v-if="cart.items.length == 0"
+          >
+            <p>No item in cart! <RouterLink to="/shop">Shop Now</RouterLink></p>
+          </div>
+          <CartContainer v-for="item in cart.items" :item="item" v-else />
         </div>
         <div class="cart-checkout-wrapper">
           <h2 class="summary-title">Order Summary</h2>
           <div class="summary-wrapper">
             <div class="summary-row">
               <p class="summary-title-checkout">Subtotal</p>
-              <p class="summary-text">$0.00</p>
+              <p class="summary-text">
+                ₦
+                {{ subTotal }}
+              </p>
             </div>
             <div class="summary-row">
               <p class="summary-title-checkout">Discount (-0%)</p>
-              <p style="color: red" class="summary-text">-$0.00</p>
+              <p style="color: red" class="summary-text">-₦0.00</p>
             </div>
             <div class="summary-row">
               <p class="summary-title-checkout">Delivery Fee</p>
-              <p class="summary-text">$0.00</p>
+              <p class="summary-text">₦0.00</p>
             </div>
           </div>
           <div class="summary-row">
             <p class="summary-title-checkout">Total</p>
-            <p class="summary-text">$0.00</p>
+            <p class="summary-text">₦{{ subTotal }}</p>
           </div>
           <div class="coupon-wrapper">
             <div class="input-wrapper">
@@ -57,6 +64,13 @@
 </template>
 <script setup>
 import { onMounted } from "vue";
+import { useCartStore } from "@/stores/cart";
+const cart = useCartStore();
+const subTotal = computed(() =>
+  cart.items.reduce((sum, item) => {
+    return sum + item.product.finalPrice * item.quantity;
+  }, 0)
+);
 onMounted(() => {
   window.scrollTo(0, 0);
 });

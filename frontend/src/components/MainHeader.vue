@@ -34,7 +34,8 @@
           v-if="smAndDown"
           class="pi pi-search"
         ></i>
-        <RouterLink to="/cart">
+        <RouterLink class="cart-link" to="/cart">
+          <div class="cart-num-container">{{ cart.items.length }}</div>
           <i class="pi pi-shopping-cart"></i>
         </RouterLink>
         <RouterLink to="/user">
@@ -73,9 +74,11 @@
 import { useDisplay } from "vuetify";
 import { ref, watch } from "vue";
 import { Drawer } from "primevue";
+import { useCartStore } from "@/stores/cart";
 const { mdAndUp, smAndDown } = useDisplay();
 const isActive = ref(false);
 const searchActive = ref(false);
+const cart = useCartStore();
 const group = ref(null);
 watch(group, () => {
   isActive.value = false;
@@ -116,6 +119,23 @@ i {
   left: 15px;
   top: 50%;
   transform: translateY(-50%);
+}
+.cart-link {
+  position: relative;
+}
+.cart-num-container {
+  width: 18px;
+  height: 18px;
+  background-color: #000;
+  color: #fff;
+  font-size: 10px;
+  border-radius: 50% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -10px;
+  right: -10px;
 }
 @media (max-width: 468px) {
   i {

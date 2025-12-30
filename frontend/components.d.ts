@@ -24,6 +24,7 @@ declare module 'vue' {
     PageTitle: typeof import('./src/components/ui/PageTitle.vue')['default']
     PrimaryButton: typeof import('./src/components/ui/PrimaryButton.vue')['default']
     ProductCard: typeof import('./src/components/ui/ProductCard.vue')['default']
+    ProductSkeleton: typeof import('./src/components/ui/ProductSkeleton.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     StyleSection: typeof import('./src/components/home/StyleSection.vue')['default']

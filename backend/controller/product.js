@@ -2,7 +2,7 @@ import Product from "../models/product.js";
 import catchAsync from "../utils/catchAsync.js";
 import Review from "../models/review.js";
 import Image from "../models/image.js";
-import Sequelize from "sequelize";
+import Sequelize, { Op } from "sequelize";
 
 export const getAllProducts = catchAsync(async (req, res) => {
   const where = {};
@@ -12,23 +12,25 @@ export const getAllProducts = catchAsync(async (req, res) => {
   if (req.query.brand) {
     where.brand = req.query.brand;
   }
-  if (req.query.minPrice) {
-    where.finalPrice = { [Op.gte]: req.query.minPrice };
-  }
-  if (req.query.maxPrice) {
-    where.finalPrice = { [Op.lte]: req.query.maxPrice };
+  if (req.query.minPrice && req.query.maxPrice) {
+    where.finalPrice = {
+      [Op.gte]: req.query.minPrice,
+      [Op.lte]: req.query.maxPrice,
+    };
   }
   if (req.query.search) {
     where.name = { [Op.iLike]: `%${req.query.search}%` };
   }
   if (req.query.availabilty) {
     where.stockCount =
-      req.query.availabilty === "instock" ? { [Op.gt]: 0 } : { [Op.lte]: 0 };
+      req.query.availabilty === "in-stock" ? { [Op.gt]: 0 } : { [Op.lte]: 0 };
   }
   const limit = parseInt(req.query.limit) || 10;
   const page = parseInt(req.query.page) || 1;
   const offset = (page - 1) * limit;
-  const totalProducts = await Product.count();
+  const totalProducts = await Product.count({ where });
+  console.log(where, "where");
+  console.log(req.query, "Query");
   const products = await Product.findAll({
     subKey: false,
     attributes: {

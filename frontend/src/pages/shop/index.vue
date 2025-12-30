@@ -154,6 +154,7 @@
               </div>
             </div>
             <PrimaryButton
+              @press="onFilter"
               styles="background-color:#000;color:#fff; width:100%; margin:10px 5px;"
               >Apply Filters</PrimaryButton
             >
@@ -163,7 +164,12 @@
           <div class="product-wrapper-title">
             <h2>Casual</h2>
             <div style="display: flex; align-items: center; gap: 5px">
-              <p>showing 1-10 of 100 products</p>
+              <p>
+                showing {{ Number((page - 1) * limit) + 1 }} -{{
+                  (page - 1) * limit + limit
+                }}
+                of {{ data?.meta.totalProducts }} products
+              </p>
               <i
                 v-if="mdAndDown"
                 @click="filterActive = !filterActive"
@@ -172,17 +178,22 @@
             </div>
           </div>
           <div class="product-grid">
+            <ProductSkeleton
+              v-if="isFetching"
+              v-for="value in Array(4).fill({})"
+            />
             <ProductCard
-              v-for="product in products"
+              v-else
+              v-for="product in data?.data"
               :key="product.id"
               :product="product"
             />
           </div>
           <Paginator
-            v-model:first="page"
-            :rows="10"
-            :totalRecords="120"
-            :rowsPerPageOptions="[10, 20, 30]"
+            v-model:first="first"
+            :rows="limit"
+            :totalRecords="data?.meta.totalProducts"
+            :rowsPerPageOptions="[5, 10, 20, 30]"
             @page="onPageChange"
           ></Paginator>
         </div>
@@ -332,6 +343,7 @@
         </div>
       </div>
       <PrimaryButton
+        @press="onFilter"
         styles="background-color:#000;color:#fff; width:100%; margin:10px 5px;"
         >Apply Filters</PrimaryButton
       >
@@ -345,6 +357,8 @@ import { Paginator, RadioButton } from "primevue";
 import { ref, onMounted } from "vue";
 import { useDisplay } from "vuetify";
 import { Drawer } from "primevue";
+import { useQuery } from "@tanstack/vue-query";
+import ProductService from "@/services/ProductService";
 const { mdAndDown } = useDisplay();
 const availabilty = ref("");
 const brand = ref("");
@@ -352,22 +366,57 @@ const category = ref("");
 const pageRef = ref(null);
 const filterRef = ref(null);
 const filterActive = ref(false);
+const filter = ref(null);
 const range = ref([30000, 1000000]);
 onMounted(() => {
   window.addEventListener("scroll", (e) => {
-    const scrolled = window.scrollY;
-    if (scrolled > 151) {
-      filterRef.value.classList.add("sticky");
-    }
-    if (scrolled < 151) {
-      filterRef.value.classList.remove("sticky");
-    }
-    if (scrolled >= 1300) {
-      filterRef.value.classList.remove("sticky");
+    if (false) {
+      const scrolled = window.scrollY;
+      if (scrolled > 151) {
+        filterRef.value.classList.add("sticky");
+      }
+      if (scrolled < 151) {
+        filterRef.value.classList.remove("sticky");
+      }
+      if (scrolled >= 1300) {
+        filterRef.value.classList.remove("sticky");
+      }
     }
   });
   window.scrollTo(0, 0);
 });
+const page = ref(1);
+const limit = ref(5);
+const first = ref(1);
+const queryKey = computed(() => [
+  "products",
+  page.value,
+  limit.value,
+  filter.value,
+]);
+const { data, isFetching } = useQuery({
+  queryKey: queryKey,
+  queryFn: () =>
+    ProductService.getAllProducts({
+      page: page.value,
+      limit: limit.value,
+      filter: filter.value,
+    }),
+});
+const onPageChange = (dt) => {
+  page.value = dt.page + 1;
+  limit.value = dt.rows;
+};
+const onFilter = () => {
+  filter.value = {
+    availabilty: availabilty.value,
+    brand: brand.value,
+    category: category.value,
+    minPrice: range.value[0],
+    maxPrice: range.value[1],
+  };
+  console.log(filter.value);
+};
 </script>
 
 <style scoped>

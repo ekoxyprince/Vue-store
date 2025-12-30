@@ -2,8 +2,22 @@
   <div class="card-product">
     <div class="card-img-container">
       <div class="card-img-wrapper">
-        <v-img class="img" height="100%" :src="product.images[0]" cover></v-img>
-        <button class="add-to-cart-btn">Add to cart</button>
+        <v-img
+          class="img"
+          height="100%"
+          :src="product.images[0].url"
+          cover
+        ></v-img>
+        <button
+          v-if="!cart.items.some((it) => it.product.id === product.id)"
+          @click="addToCart.call(this, product)"
+          class="add-to-cart-btn"
+        >
+          Add to cart
+        </button>
+        <button class="add-to-cart-btn" v-else>
+          <RouterLink style="color: #fff" to="/cart">View in cart</RouterLink>
+        </button>
       </div>
     </div>
     <div class="card-content">
@@ -17,20 +31,22 @@
         <v-rating
           hover
           :length="5"
-          :size="24"
+          :size="mdAndUp ? 24 : 18"
           :model-value="product.rating"
           color="#ffc633"
           active-color="#ffc633"
           readonly
         />
-        <p>{{ product.rating }}/5</p>
+        <p>{{ Number(product.averageRating).toFixed(1) }}/5</p>
       </div>
       <div class="price-wrapper">
-        <p>${{ product.finalPrice }}</p>
+        <p>₦{{ Number(product.finalPrice).toLocaleString("en-us") }}</p>
         <p style="text-decoration: line-through; color: #888">
-          ${{ product.price }}
+          ₦{{ Number(product.price).toLocaleString("en-us") }}
         </p>
-        <div class="discount-wrapper">{{ product.discount }}%</div>
+        <div class="discount-wrapper">
+          {{ Number(product.discount).toFixed(0) }}%
+        </div>
       </div>
     </div>
   </div>
@@ -39,6 +55,15 @@
 <script setup>
 import { defineProps } from "vue";
 import { RouterLink } from "vue-router";
+import { useDisplay } from "vuetify";
+import { useCartStore } from "@/stores/cart";
+import toast from "vue3-hot-toast";
+const { mdAndUp } = useDisplay();
+const cart = useCartStore();
+function addToCart(product) {
+  cart.addToCart({ product, quantity: 1 });
+  toast.success("added to cart");
+}
 defineProps({
   product: Object,
 });
@@ -116,6 +141,7 @@ defineProps({
   display: flex;
   gap: 5px;
   align-items: center;
+  flex-wrap: wrap;
 }
 .price-wrapper p {
   font-size: 18px;
@@ -149,6 +175,13 @@ defineProps({
   .add-to-cart-btn {
     bottom: 20px;
     opacity: 1;
+  }
+  .price-wrapper p {
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .discount-wrapper {
+    padding: 3px 8px;
   }
 }
 </style>

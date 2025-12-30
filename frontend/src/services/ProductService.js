@@ -15,9 +15,14 @@ class ProductService {
         throw new Error(error?.response?.data?.message || error.message);
       });
   }
-  getAllProducts({ page, limit }) {
+  getAllProducts({ page, limit, filter }) {
+    let url = !filter
+      ? `/api/products?page=${page}&limit=${limit}`
+      : `/api/products?page=${page}&limit=${limit}&${new URLSearchParams(
+          filter
+        ).toString()}`;
     return apiInstance
-      .get(`/api/products?page=${page}&limit=${limit}`)
+      .get(url)
       .then((resp) => resp.data)
       .catch((error) => {
         throw new Error(error?.response?.data?.message || error.message);
