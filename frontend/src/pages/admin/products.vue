@@ -15,7 +15,10 @@
       </div>
       <v-dialog v-model="isActive" max-width="500">
         <template #default="{ isActive }">
-          <v-card title="Add Product" max-width="700">
+          <v-card
+            :title="isEditing ? 'Edit Product' : 'Add Product'"
+            max-width="700"
+          >
             <v-form ref="form" @submit.prevent="submit(isActive)">
               <v-card-text>
                 <v-row dense>
@@ -296,4 +299,19 @@ const headers = ref([
 ]);
 </script>
 
-<style scoped></style>
+<style scoped>
+.table-wrapper {
+  overflow-x: auto !important;
+  width: 100%;
+}
+@media (max-width: 468px) {
+  .table-wrapper {
+    max-width: 400px;
+  }
+}
+@media (max-width: 400px) {
+  .table-wrapper {
+    max-width: 320px;
+  }
+}
+</style>

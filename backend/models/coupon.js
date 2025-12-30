@@ -18,10 +18,6 @@ const Coupon = database.define(
       type: Sequelize.DECIMAL,
       allowNull: false,
     },
-    expiryDate: {
-      type: Sequelize.DATE,
-      allowNull: false,
-    },
     status: {
       type: Sequelize.ENUM(["active", "inactive"]),
       defaultValue: "active",

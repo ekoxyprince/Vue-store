@@ -64,4 +64,19 @@ const headers = ref([
 ]);
 </script>
 
-<style scoped></style>
+<style scoped>
+.table-wrapper {
+  overflow-x: auto !important;
+  width: 100%;
+}
+@media (max-width: 468px) {
+  .table-wrapper {
+    max-width: 400px;
+  }
+}
+@media (max-width: 400px) {
+  .table-wrapper {
+    max-width: 320px;
+  }
+}
+</style>

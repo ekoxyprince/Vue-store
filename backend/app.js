@@ -9,6 +9,7 @@ import auth from "./middleware/auth.js";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/user.js";
 import productRoutes from "./routes/product.js";
+import couponRoutes from "./routes/coupon.js";
 
 app.use(express.json());
 app.use(express.static("./backend/public"));
@@ -24,6 +25,7 @@ app.use(logger("dev"));
 app.use("/api/auth", authRoutes);
 app.use("/api/users", auth, userRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/coupons", auth, couponRoutes);
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "frontend", "dist")));
   app.get(/^\/(?!api).*/, (req, res) => {

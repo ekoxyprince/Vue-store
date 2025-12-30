@@ -12,8 +12,20 @@ export const createCoupon = catchAsync(async (req, res) => {
   res.status(201).json({ success: true, data: coupon });
 });
 export const getAllCoupons = catchAsync(async (req, res) => {
-  const coupons = await Coupon.findAll();
-  res.status(200).json({ success: true, data: coupons });
+  const limit = parseInt(req.query.limit) || 10;
+  const page = parseInt(req.query.page) || 1;
+  const offset = (page - 1) * limit;
+  const coupons = await Coupon.findAll({ limit, offset });
+  const totalCoupons = await Coupon.count();
+  res.status(200).json({
+    success: true,
+    data: coupons,
+    meta: {
+      totalCoupons,
+      page,
+      limit,
+    },
+  });
 });
 
 export const updateCoupon = catchAsync(async (req, res) => {

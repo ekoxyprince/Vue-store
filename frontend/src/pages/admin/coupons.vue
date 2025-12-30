@@ -9,110 +9,173 @@
   <v-breadcrumbs :items="['admin', 'coupons']"></v-breadcrumbs>
   <v-row>
     <v-col cols="12" lg="12">
-      <h2>Coupons</h2>
+      <div class="d-flex justify-space-between mb-2">
+        <h2>Coupons</h2>
+        <v-btn @click="onClickCreate">Create Coupon</v-btn>
+      </div>
       <v-responsive>
         <div class="table-wrapper">
           <v-data-table-server
-            v-model:items-per-page="itemsPerPage"
+            v-model:items-per-page="limit"
             :headers="headers"
-            :items="serverItems"
-            :items-length="totalItems"
-            :loading="loading"
-            :search="search"
+            :items="data?.data"
+            :items-length="data?.meta?.totalCoupons"
+            :loading="isFetching"
             item-value="name"
-            @update:options="loadItems"
-          />
+            @update:options="changeOptions"
+          >
+            <template #item.actions="{ item }">
+              <v-btn
+                icon
+                size="small"
+                variant="text"
+                color="#000"
+                @click="onEdit.call(this, item)"
+              >
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+            </template>
+          </v-data-table-server>
         </div>
       </v-responsive>
+      <v-dialog v-model="isActive" max-width="500">
+        <template #default="{ isActive }">
+          <v-card
+            :title="isEditing ? 'Edit Coupon' : 'Add Coupon'"
+            max-width="700"
+          >
+            <v-form ref="form" @submit.prevent="submit(isActive)">
+              <v-card-text>
+                <v-row dense>
+                  <v-col cols="12">
+                    <v-text-field
+                      label="Code"
+                      v-model="formData.code"
+                      required
+                    />
+                  </v-col>
+                  <v-col cols="6">
+                    <v-text-field
+                      label="Discount"
+                      type="number"
+                      v-model="formData.discount"
+                      required
+                    />
+                  </v-col>
+                  <v-col cols="6">
+                    <v-select
+                      label="Status"
+                      :items="status"
+                      item-title="name"
+                      item-value="name"
+                      v-model="formData.status"
+                      required
+                    />
+                  </v-col>
+                </v-row>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer />
+
+                <v-btn variant="text" @click="isActive.value = false">
+                  Cancel
+                </v-btn>
+
+                <v-btn color="primary" type="submit"> Save Coupon </v-btn>
+              </v-card-actions>
+            </v-form>
+          </v-card>
+        </template>
+      </v-dialog>
     </v-col>
   </v-row>
 </template>
 
 <script setup>
 import { ref } from "vue";
-
-const desserts = [
-  {
-    name: "Frozen Yogurt",
-    calories: 159,
-    fat: 6,
-    carbs: 24,
-    protein: 4,
-    iron: "1",
+import CouponService from "@/services/CouponService";
+import toast from "vue3-hot-toast";
+import { useQueryClient, useMutation, useQuery } from "@tanstack/vue-query";
+const queryClient = useQueryClient();
+const mutation = useMutation({
+  mutationFn: CouponService.create,
+  onSuccess: (resp) => {
+    toast.success("Coupon created");
   },
-  {
-    name: "Jelly bean",
-    calories: 375,
-    fat: 0,
-    carbs: 94,
-    protein: 0,
-    iron: "0",
+  onError: (error) => {
+    toast.error(error.message);
   },
-  {
-    name: "KitKat",
-    calories: 518,
-    fat: 26,
-    carbs: 65,
-    protein: 7,
-    iron: "6",
+});
+const updateMutation = useMutation({
+  mutationFn: CouponService.update,
+  onSuccess: (resp) => {
+    toast.success("Coupon updated");
   },
-  {
-    name: "Eclair",
-    calories: 262,
-    fat: 16,
-    carbs: 23,
-    protein: 6,
-    iron: "7",
+  onError: (error) => {
+    toast.error(error.message);
   },
-  {
-    name: "Gingerbread",
-    calories: 356,
-    fat: 16,
-    carbs: 49,
-    protein: 3.9,
-    iron: "16",
-  },
-  {
-    name: "Ice cream sandwich",
-    calories: 237,
-    fat: 9,
-    carbs: 37,
-    protein: 4.3,
-    iron: "1",
-  },
-  {
-    name: "Lollipop",
-    calories: 392,
-    fat: 0.2,
-    carbs: 98,
-    protein: 0,
-    iron: "2",
-  },
-  {
-    name: "Cupcake",
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-    protein: 4.3,
-    iron: "8",
-  },
-  {
-    name: "Honeycomb",
-    calories: 408,
-    fat: 3.2,
-    carbs: 87,
-    protein: 6.5,
-    iron: "45",
-  },
-  {
-    name: "Donut",
-    calories: 452,
-    fat: 25,
-    carbs: 51,
-    protein: 4.9,
-    iron: "22",
-  },
-];
+});
+const page = ref(1);
+const limit = ref(10);
+const queryKey = computed(() => ["coupons", page.value, limit.value]);
+const { data, isFetching } = useQuery({
+  queryKey: queryKey,
+  queryFn: () =>
+    CouponService.getAllCoupons({ page: page.value, limit: limit.value }),
+});
+const form = ref(null);
+const isEditing = ref(false);
+const status = ref([
+  { id: 1, name: "active" },
+  { id: 2, name: "inactive" },
+]);
+const isActive = ref(false);
+const formData = ref({
+  status: undefined,
+  code: undefined,
+  discount: 0,
+});
+const onClickCreate = () => {
+  isEditing.value = false;
+  formData.value = {
+    status: undefined,
+    code: undefined,
+    discount: 0,
+  };
+  isActive.value = true;
+};
+const onEdit = (item) => {
+  isEditing.value = true;
+  formData.value = { ...item };
+  isActive.value = true;
+};
+const submit = async (isActive) => {
+  if (!isEditing.value) {
+    await mutation.mutateAsync(formData.value, {
+      onSettled: (resp) => {
+        queryClient.invalidateQueries({
+          queryKey: ["coupons"],
+        });
+        isActive.value = false;
+      },
+    });
+  } else {
+    await updateMutation.mutateAsync(formData.value, {
+      onSettled: (resp) => {
+        queryClient.invalidateQueries({
+          queryKey: ["coupons"],
+        });
+        isActive.value = false;
+      },
+    });
+  }
+};
+const changeOptions = ({ page: pageNum, itemsPerPage, sortBy }) => {
+  page.value = pageNum;
+  limit.value = itemsPerPage;
+};
+const desserts = [];
 const FakeAPI = {
   async fetch({ page, itemsPerPage, sortBy }) {
     return new Promise((resolve) => {
@@ -138,16 +201,14 @@ const FakeAPI = {
 const itemsPerPage = ref(5);
 const headers = ref([
   {
-    title: "Dessert (100g serving)",
+    title: "Code",
     align: "start",
     sortable: false,
-    key: "name",
+    key: "code",
   },
-  { title: "Calories", key: "calories", align: "end" },
-  { title: "Fat (g)", key: "fat", align: "end" },
-  { title: "Carbs (g)", key: "carbs", align: "end" },
-  { title: "Protein (g)", key: "protein", align: "end" },
-  { title: "Iron (%)", key: "iron", align: "end" },
+  { title: "Discount (%)", key: "discount", align: "center" },
+  { title: "Status", key: "status", align: "center" },
+  { title: "Actions", key: "actions", align: "end" },
 ]);
 const search = ref("");
 const serverItems = ref([]);
@@ -163,4 +224,19 @@ function loadItems({ page, itemsPerPage, sortBy }) {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.table-wrapper {
+  overflow-x: auto !important;
+  width: 100%;
+}
+@media (max-width: 468px) {
+  .table-wrapper {
+    max-width: 400px;
+  }
+}
+@media (max-width: 400px) {
+  .table-wrapper {
+    max-width: 320px;
+  }
+}
+</style>
