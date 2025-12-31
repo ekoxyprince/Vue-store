@@ -11,48 +11,57 @@
       <v-breadcrumbs
         :items="['home', 'shop', 'product details']"
       ></v-breadcrumbs>
-      <div>
+      <div v-if="isFetching" class="card flex justify-center">
+        <ProgressSpinner />
+      </div>
+      <div v-else>
         <div class="wrapper">
           <div class="gallery">
             <div class="image-container">
               <div
-                v-for="image in product.images"
+                v-for="image in data?.data.images"
                 :class="[
                   'img-wrapper',
-                  image == selectedImage ? 'selected' : '',
+                  image.url == selectedImage ? 'selected' : '',
                 ]"
               >
                 <v-img
-                  @click="selectImage.call(this, image)"
+                  @click="selectImage.call(this, image.url)"
                   class="img"
-                  :src="image"
+                  :src="image.url"
                   cover
                 ></v-img>
               </div>
             </div>
             <div class="main-image">
-              <v-img class="image" :src="selectedImage" cover></v-img>
+              <v-img
+                class="image"
+                :src="selectedImage || data?.data.images[0].url"
+                cover
+              ></v-img>
             </div>
           </div>
           <div class="details">
-            <h2 class="name" style="color: #000">{{ product.name }}</h2>
+            <h2 class="name" style="color: #000">{{ data?.data.name }}</h2>
             <div class="rating-wrapper">
               <v-rating
                 hover
                 :length="5"
                 :size="24"
-                :model-value="product.rating"
+                :model-value="Number(data?.data.averageRating).toFixed(1)"
                 color="#ffc633"
                 active-color="#ffc633"
                 readonly
               />
-              <p>{{ product.rating }}/5</p>
+              <p>{{ Number(data?.data.averageRating).toFixed(1) }}/5</p>
             </div>
             <div class="price-wrapper">
-              <p>${{ product.finalPrice }}</p>
+              <p>
+                ₦{{ Number(data?.data.finalPrice).toLocaleString("en-us") }}
+              </p>
             </div>
             <p class="para">
-              {{ product.description }}
+              {{ data?.data.description }}
             </p>
             <div class="card flex align-items-center gap-3">
               <div class="input-wrapper">
@@ -60,8 +69,16 @@
                 <input v-model="quantity" type="number" />
                 <i @click="increaseCount" class="pi pi-plus"></i>
               </div>
-              <PrimaryButton styles="background-color:#000; color:#fff;"
+              <PrimaryButton
+                v-if="!cart.items.some((it) => it.product.id === data?.data.id)"
+                @press="addToCart"
+                styles="background-color:#000; color:#fff;"
                 >Add to Cart</PrimaryButton
+              >
+              <PrimaryButton v-else styles="background-color:#000; color:#fff;"
+                ><RouterLink style="color: #fff" to="/cart"
+                  >View in cart</RouterLink
+                ></PrimaryButton
               >
             </div>
           </div>
@@ -74,59 +91,149 @@
           <v-tabs-window-item value="one">
             <v-sheet>
               <div class="">
-                {{ product?.details }}
+                {{ data?.data.details }}
               </div>
             </v-sheet>
           </v-tabs-window-item>
           <v-tabs-window-item value="two">
             <v-sheet>
-              <h2 class="review-header">
-                Total Reviews
-                <span style="font-size: 18px; opacity: 0.5">(125)</span>
-              </h2>
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <h2 class="review-header">
+                  Total Reviews
+                  <span style="font-size: 18px; opacity: 0.5"
+                    >({{ data.reviews.length }})</span
+                  >
+                </h2>
+                <v-btn
+                  v-if="auth.isAuth && auth.details.role === 'user'"
+                  icon
+                  size="small"
+                  variant="text"
+                  color="#000"
+                  @click="isActive = true"
+                >
+                  <v-icon>mdi-square-edit-outline</v-icon>
+                </v-btn>
+              </div>
               <div class="testimony-card-wrapper">
-                <TestimonyCard />
-                <TestimonyCard />
+                <TestimonyCard
+                  v-for="review in data?.reviews"
+                  :review="review"
+                />
               </div>
             </v-sheet>
           </v-tabs-window-item>
         </v-tabs-window>
         <h2 class="header">You might also like</h2>
         <div class="card-wrapper-horizontal">
-          <ProductCard
+          <!-- <ProductCard
             v-for="product in products.slice(0, 4)"
             :product="product"
-          />
+          /> -->
         </div>
       </div>
     </v-container>
   </main>
+  <v-dialog v-model="isActive" max-width="500">
+    <template #default="{ isActive }">
+      <v-card title="Write a review" max-width="700">
+        <v-form ref="form" @submit.prevent="submit(isActive)">
+          <v-card-text>
+            <v-row dense>
+              <v-col cols="12">
+                <v-rating
+                  hover
+                  :length="5"
+                  :size="36"
+                  :model-value="formData.rating"
+                  v-model="formData.rating"
+                  color="#ffc633"
+                  active-color="#ffc633"
+                />
+              </v-col>
+              <v-col cols="12">
+                <v-textarea
+                  label="Review"
+                  rows="3"
+                  v-model="formData.review"
+                  required
+                />
+              </v-col>
+            </v-row>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer />
+
+            <v-btn variant="text" @click="isActive.value = false">
+              Cancel
+            </v-btn>
+
+            <v-btn color="primary" type="submit"> Save Review </v-btn>
+          </v-card-actions>
+        </v-form>
+      </v-card>
+    </template>
+  </v-dialog>
 </template>
 
 <script setup>
 import { useRoute } from "vue-router";
 import products from "@/constants/products";
 import { onMounted, onUnmounted, watch } from "vue";
+import { useQuery, useMutation } from "@tanstack/vue-query";
+import { ProgressSpinner } from "primevue";
+import ProductService from "@/services/ProductService";
+import { useCartStore } from "@/stores/cart";
+import { useAuthStore } from "@/stores/auth";
+import toast from "vue3-hot-toast";
+import ReviewService from "@/services/ReviewService";
 const route = useRoute();
-const product = computed(() => products.find((P) => P.id == route.params.id));
-const selectedImage = ref(product.value.images[0]);
+const { data, isFetching } = useQuery({
+  queryKey: [`product-${route.params.id}`],
+  queryFn: () => ProductService.getProductById({ id: route.params.id }),
+});
+const cart = useCartStore();
+const auth = useAuthStore();
+const selectedImage = ref(undefined);
 const quantity = ref(1);
 const tab = ref("one");
+const isActive = ref(false);
+const formData = ref({
+  rating: 0,
+  review: "",
+});
+const mutation = useMutation({
+  mutationKey: ["create-review"],
+  mutationFn: ReviewService.create,
+  onSuccess: (resp) => {
+    toast.success("Review created");
+  },
+  onError: (error) => {
+    toast.error(error.message);
+  },
+});
 const selectImage = (image) => {
   selectedImage.value = image;
 };
 function animateImages() {
-  const index = product.value.images.findIndex(
-    (p) => p === selectedImage.value
+  const index = data.value?.data.images.findIndex(
+    (p) => p.url === selectedImage.value
   );
-  if (index < product.value.images.length - 1) {
-    selectedImage.value = product.value.images[index + 1];
+  if (index < data?.value.data.images.length - 1) {
+    selectedImage.value = data.value?.data.images[index + 1].url;
   } else {
-    selectedImage.value = product.value.images[0];
+    selectedImage.value = data?.value.data.images[0].url;
   }
 }
 const increaseCount = () => {
-  if (quantity.value < 100) {
+  if (quantity.value < data.value?.data.stockCount) {
     quantity.value += 1;
   }
 };
@@ -144,6 +251,20 @@ onUnmounted(() => {
   clearInterval(interval);
 });
 watch(selectedImage, (val) => {});
+function addToCart() {
+  cart.addToCart({ product: data.value?.data, quantity: quantity.value });
+  toast.success("added to cart");
+}
+const submit = async (isActive) => {
+  await mutation.mutateAsync(
+    { ...formData.value, productId: data.value?.data.id },
+    {
+      onSettled: (resp) => {
+        isActive.value = false;
+      },
+    }
+  );
+};
 </script>
 
 <style scoped>

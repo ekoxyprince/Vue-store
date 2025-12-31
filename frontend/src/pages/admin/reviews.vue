@@ -6,12 +6,11 @@
 }
 </route>
 <template>
-  <v-breadcrumbs :items="['admin', 'coupons']"></v-breadcrumbs>
+  <v-breadcrumbs :items="['admin', 'reviews']"></v-breadcrumbs>
   <v-row>
     <v-col cols="12" lg="12">
       <div class="d-flex justify-space-between mb-2">
-        <h2>Coupons</h2>
-        <v-btn @click="onClickCreate">Create Coupon</v-btn>
+        <h2>Reviews</h2>
       </div>
       <v-responsive>
         <div class="table-wrapper">
@@ -19,7 +18,7 @@
             v-model:items-per-page="limit"
             :headers="headers"
             :items="data?.data"
-            :items-length="data?.meta?.totalCoupons"
+            :items-length="data?.meta?.totalReviews"
             :loading="isFetching"
             item-value="name"
             @update:options="changeOptions"
@@ -41,25 +40,21 @@
       <v-dialog v-model="isActive" max-width="500">
         <template #default="{ isActive }">
           <v-card
-            :title="isEditing ? 'Edit Coupon' : 'Add Coupon'"
+            :title="isEditing ? 'Edit Reviews' : 'Add Reviews'"
             max-width="700"
           >
             <v-form ref="form" @submit.prevent="submit(isActive)">
               <v-card-text>
                 <v-row dense>
-                  <v-col cols="12">
-                    <v-text-field
-                      label="Code"
-                      v-model="formData.code"
-                      required
-                    />
-                  </v-col>
                   <v-col cols="6">
-                    <v-text-field
-                      label="Discount"
-                      type="number"
-                      v-model="formData.discount"
-                      required
+                    <v-rating
+                      hover
+                      :length="5"
+                      :size="36"
+                      :model-value="formData.rating"
+                      v-model="formData.rating"
+                      color="#ffc633"
+                      active-color="#ffc633"
                     />
                   </v-col>
                   <v-col cols="6">
@@ -69,6 +64,14 @@
                       item-title="name"
                       item-value="name"
                       v-model="formData.status"
+                      required
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-textarea
+                      label="Review"
+                      rows="3"
+                      v-model="formData.review"
                       required
                     />
                   </v-col>
@@ -82,7 +85,7 @@
                   Cancel
                 </v-btn>
 
-                <v-btn color="primary" type="submit"> Save Coupon </v-btn>
+                <v-btn color="primary" type="submit"> Save Reviews </v-btn>
               </v-card-actions>
             </v-form>
           </v-card>
@@ -94,23 +97,14 @@
 
 <script setup>
 import { ref } from "vue";
-import CouponService from "@/services/CouponService";
+import ReviewService from "@/services/ReviewService";
 import toast from "vue3-hot-toast";
 import { useQueryClient, useMutation, useQuery } from "@tanstack/vue-query";
 const queryClient = useQueryClient();
-const mutation = useMutation({
-  mutationFn: CouponService.create,
-  onSuccess: (resp) => {
-    toast.success("Coupon created");
-  },
-  onError: (error) => {
-    toast.error(error.message);
-  },
-});
 const updateMutation = useMutation({
-  mutationFn: CouponService.update,
+  mutationFn: ReviewService.update,
   onSuccess: (resp) => {
-    toast.success("Coupon updated");
+    toast.success("Review updated");
   },
   onError: (error) => {
     toast.error(error.message);
@@ -118,33 +112,24 @@ const updateMutation = useMutation({
 });
 const page = ref(1);
 const limit = ref(10);
-const queryKey = computed(() => ["coupons", page.value, limit.value]);
+const queryKey = computed(() => ["reviews", page.value, limit.value]);
 const { data, isFetching } = useQuery({
   queryKey: queryKey,
   queryFn: () =>
-    CouponService.getAllCoupons({ page: page.value, limit: limit.value }),
+    ReviewService.getAllReviews({ page: page.value, limit: limit.value }),
 });
 const form = ref(null);
 const isEditing = ref(false);
 const status = ref([
-  { id: 1, name: "active" },
-  { id: 2, name: "inactive" },
+  { id: 1, name: "pending" },
+  { id: 2, name: "approved" },
 ]);
 const isActive = ref(false);
 const formData = ref({
-  status: undefined,
-  code: undefined,
-  discount: 0,
+  rating: 0,
+  review: "",
+  status: "",
 });
-const onClickCreate = () => {
-  isEditing.value = false;
-  formData.value = {
-    status: undefined,
-    code: undefined,
-    discount: 0,
-  };
-  isActive.value = true;
-};
 const onEdit = (item) => {
   isEditing.value = true;
   formData.value = { ...item };
@@ -152,19 +137,12 @@ const onEdit = (item) => {
 };
 const submit = async (isActive) => {
   if (!isEditing.value) {
-    await mutation.mutateAsync(formData.value, {
-      onSettled: (resp) => {
-        queryClient.invalidateQueries({
-          queryKey: ["coupons"],
-        });
-        isActive.value = false;
-      },
-    });
+    console.log("No action!");
   } else {
     await updateMutation.mutateAsync(formData.value, {
       onSettled: (resp) => {
         queryClient.invalidateQueries({
-          queryKey: ["coupons"],
+          queryKey: ["reviews"],
         });
         isActive.value = false;
       },
@@ -175,15 +153,16 @@ const changeOptions = ({ page: pageNum, itemsPerPage, sortBy }) => {
   page.value = pageNum;
   limit.value = itemsPerPage;
 };
-
 const headers = ref([
   {
-    title: "Code",
+    title: "Rating",
     align: "start",
     sortable: false,
-    key: "code",
+    key: "rating",
   },
-  { title: "Discount (%)", key: "discount", align: "center" },
+  { title: "Review", key: "review", align: "center" },
+  { title: "User", key: "user.fullname", align: "center" },
+  { title: "Product", key: "product.name", align: "center" },
   { title: "Status", key: "status", align: "center" },
   { title: "Actions", key: "actions", align: "end" },
 ]);

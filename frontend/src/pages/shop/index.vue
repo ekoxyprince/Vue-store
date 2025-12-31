@@ -180,7 +180,7 @@
           <div class="product-grid">
             <ProductSkeleton
               v-if="isFetching"
-              v-for="value in Array(4).fill({})"
+              v-for="value in Array(limit).fill({})"
             />
             <ProductCard
               v-else

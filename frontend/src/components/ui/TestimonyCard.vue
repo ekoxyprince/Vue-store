@@ -4,17 +4,13 @@
       hover
       :length="5"
       :size="mdAndUp ? 22 : 19"
-      :model-value="rating"
+      :model-value="Number(review.rating).toFixed(1)"
       color="#ffc633"
       active-color="#ffc633"
       readonly
     />
-    <h2>Sarah Williams</h2>
-    <p>
-      "I'm blown away by the quality and style of the clothes I received from
-      Shop.co. From casual wear to elegant dresses, every piece I've bought has
-      exceeded my expectations.”
-    </p>
+    <h2>{{ review.user.fullname }}</h2>
+    <p>"{{ review.review }}”</p>
   </div>
 </template>
 
@@ -23,6 +19,11 @@ import { ref } from "vue";
 import { useDisplay } from "vuetify";
 const { mdAndUp } = useDisplay();
 const rating = ref(4.5);
+defineProps({
+  review: {
+    type: Object,
+  },
+});
 </script>
 
 <style scoped>

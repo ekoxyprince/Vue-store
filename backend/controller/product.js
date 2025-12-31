@@ -1,4 +1,5 @@
 import Product from "../models/product.js";
+import User from "../models/user.js";
 import catchAsync from "../utils/catchAsync.js";
 import Review from "../models/review.js";
 import Image from "../models/image.js";
@@ -29,8 +30,6 @@ export const getAllProducts = catchAsync(async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const offset = (page - 1) * limit;
   const totalProducts = await Product.count({ where });
-  console.log(where, "where");
-  console.log(req.query, "Query");
   const products = await Product.findAll({
     subKey: false,
     attributes: {
@@ -97,9 +96,20 @@ export const getProductById = catchAsync(async (req, res) => {
     ],
     group: ["Product.id", "images.id"],
   });
+  const reviews = await Review.findAll({
+    where: { productId: product.id, status: "approved" },
+    include: [
+      {
+        model: User,
+        as: "user",
+        attributes: ["fullname"],
+      },
+    ],
+  });
   res.status(200).json({
     success: true,
     data: product,
+    reviews,
   });
 });
 export const createProduct = catchAsync(async (req, res) => {

@@ -36,6 +36,14 @@ class ProductService {
         throw new Error(error?.response?.data?.message || error.message);
       });
   }
+  getProductById({ id }) {
+    return apiInstance
+      .get(`/api/products/${id}`)
+      .then((resp) => resp.data)
+      .catch((error) => {
+        throw new Error(error?.response?.data?.message || error.message);
+      });
+  }
 }
 
 export default new ProductService();

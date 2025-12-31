@@ -40,6 +40,14 @@
       <i class="pi pi-tag"></i>
       Coupons
     </RouterLink>
+    <RouterLink
+      class="side-link"
+      active-class="side-link-active"
+      to="/admin/Reviews"
+    >
+      <i class="pi pi-file-check"></i>
+      Reviews
+    </RouterLink>
     <button class="side-link side-link-logout">
       <i class="pi pi-sign-out"></i>
       Logout

@@ -32,7 +32,7 @@
           hover
           :length="5"
           :size="mdAndUp ? 24 : 18"
-          :model-value="product.rating"
+          :model-value="Number(product.averageRating).toFixed(1)"
           color="#ffc633"
           active-color="#ffc633"
           readonly
