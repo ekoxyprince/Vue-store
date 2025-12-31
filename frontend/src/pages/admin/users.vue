@@ -1,7 +1,9 @@
 <route lang="json">
 {
   "meta": {
-    "layout": "admin"
+    "layout": "admin",
+    "requireAuth": true,
+    "role": "admin"
   }
 }
 </route>
