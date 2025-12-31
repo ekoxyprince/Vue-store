@@ -27,6 +27,14 @@ class CouponService {
         throw new Error(error?.response?.data?.message || error.message);
       });
   }
+  getById(code) {
+    return apiInstance
+      .get(`/api/coupons/${code}`)
+      .then((resp) => resp.data)
+      .catch((error) => {
+        throw new Error(error?.response?.data?.message || error.message);
+      });
+  }
 }
 
 export default new CouponService();

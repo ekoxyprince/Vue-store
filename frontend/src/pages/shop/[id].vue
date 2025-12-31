@@ -132,10 +132,10 @@
         </v-tabs-window>
         <h2 class="header">You might also like</h2>
         <div class="card-wrapper-horizontal">
-          <!-- <ProductCard
-            v-for="product in products.slice(0, 4)"
+          <ProductCard
+            v-for="product in data?.relatedProducts"
             :product="product"
-          /> -->
+          />
         </div>
       </div>
     </v-container>

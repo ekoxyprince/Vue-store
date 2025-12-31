@@ -106,10 +106,39 @@ export const getProductById = catchAsync(async (req, res) => {
       },
     ],
   });
+  const relatedProducts = await Product.findAll({
+    subKey: false,
+    attributes: {
+      include: [
+        [
+          Sequelize.literal(`(
+          SELECT COALESCE(AVG(r.rating), 0)
+          FROM reviews AS r
+          WHERE r.productId = product.id
+        )`),
+          "averageRating",
+        ],
+      ],
+    },
+    include: [
+      {
+        model: Image,
+        as: "images",
+      },
+      {
+        model: Review,
+        as: "reviews",
+        attributes: [],
+      },
+    ],
+    where: { [Op.or]: [{ brand: product.brand, category: product.category }] },
+    limit: 4,
+  });
   res.status(200).json({
     success: true,
     data: product,
     reviews,
+    relatedProducts,
   });
 });
 export const createProduct = catchAsync(async (req, res) => {

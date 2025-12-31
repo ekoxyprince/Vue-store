@@ -31,8 +31,10 @@
               </p>
             </div>
             <div class="summary-row">
-              <p class="summary-title-checkout">Discount (-0%)</p>
-              <p style="color: red" class="summary-text">-₦0.00</p>
+              <p class="summary-title-checkout">Discount (-{{ discount }}%)</p>
+              <p style="color: red" class="summary-text">
+                -₦{{ subTotal * (discount / 100) }}
+              </p>
             </div>
             <div class="summary-row">
               <p class="summary-title-checkout">Delivery Fee</p>
@@ -41,14 +43,23 @@
           </div>
           <div class="summary-row">
             <p class="summary-title-checkout">Total</p>
-            <p class="summary-text">₦{{ subTotal }}</p>
+            <p class="summary-text">
+              ₦{{ subTotal - subTotal * (discount / 100) }}
+            </p>
           </div>
           <div class="coupon-wrapper">
             <div class="input-wrapper">
               <i class="pi pi-tag"></i>
-              <input type="text" placeholder="Add promo code" />
+              <input
+                :readonly="cart.items.length === 0 || isCodeFound"
+                v-model="code"
+                type="text"
+                placeholder="Add promo code"
+              />
             </div>
-            <PrimaryButton styles="background-color:#000; color:#fff; "
+            <PrimaryButton
+              @press="applyCoupon"
+              styles="background-color:#000; color:#fff; "
               >Apply</PrimaryButton
             >
           </div>
@@ -65,7 +76,12 @@
 <script setup>
 import { onMounted } from "vue";
 import { useCartStore } from "@/stores/cart";
+import CouponService from "@/services/CouponService";
+import toast from "vue3-hot-toast";
 const cart = useCartStore();
+const discount = ref(0);
+const isCodeFound = ref(false);
+const code = ref(undefined);
 const subTotal = computed(() =>
   cart.items.reduce((sum, item) => {
     return sum + item.product.finalPrice * item.quantity;
@@ -74,6 +90,15 @@ const subTotal = computed(() =>
 onMounted(() => {
   window.scrollTo(0, 0);
 });
+const applyCoupon = async () => {
+  try {
+    const resp = await CouponService.getById(code.value);
+    discount.value = Number(resp.data.discount);
+    isCodeFound.value = true;
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
 </script>
 
 <style scoped>

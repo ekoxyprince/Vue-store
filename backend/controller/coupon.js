@@ -52,15 +52,21 @@ export const deleteCoupon = catchAsync(async (req, res) => {
 });
 
 export const getCouponById = catchAsync(async (req, res) => {
+  console.log(req.params.id);
   const coupon = await Coupon.findOne({
     where: {
-      [Op.or]: [{ id: req.params.id }, { code: req.params.id }],
+      [Op.or]: [{ code: req.params.id }],
     },
   });
   if (!coupon) {
     return res
       .status(404)
       .json({ success: false, message: "Coupon not found" });
+  }
+  if (coupon.status == "inactive") {
+    return res
+      .status(400)
+      .json({ success: false, message: "Coupon is inactive" });
   }
   res.status(200).json({ success: true, data: coupon });
 });
