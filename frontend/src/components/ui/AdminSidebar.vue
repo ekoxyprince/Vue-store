@@ -48,14 +48,20 @@
       <i class="pi pi-file-check"></i>
       Reviews
     </RouterLink>
-    <button class="side-link side-link-logout">
+    <button
+      @click="auth.logout(), $router.push('/signin')"
+      class="side-link side-link-logout"
+    >
       <i class="pi pi-sign-out"></i>
       Logout
     </button>
   </aside>
 </template>
 
-<script setup></script>
+<script setup>
+import { useAuthStore } from "@/stores/auth";
+const auth = useAuthStore();
+</script>
 
 <style scoped>
 aside {
