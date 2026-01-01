@@ -11,19 +11,29 @@
     </v-container>
     <div class="carousel">
       <div class="wrapper">
-        <TestimonyCard />
-        <TestimonyCard />
-        <TestimonyCard />
-        <TestimonyCard />
-        <TestimonyCard />
-        <TestimonyCard />
-        <TestimonyCard />
+        <TestimonialSkeleton
+          v-for="value in Array(10).fill(10)"
+          v-if="isFetching"
+        />
+        <TestimonyCard
+          v-for="review in data.data"
+          :review="review"
+          :key="review.id"
+          v-else
+        />
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
+import { useQuery } from "@tanstack/vue-query";
+import ReviewService from "@/services/ReviewService";
+import TestimonialSkeleton from "../ui/TestimonialSkeleton.vue";
+const { data, isFetching } = useQuery({
+  queryKey: ["some-testimonials"],
+  queryFn: () => ReviewService.getAllReviews({ page: 1, limit: 10 }),
+});
 function slideRight() {
   const slide = document.querySelector(".carousel");
   const wrapper = document.querySelector(".wrapper");

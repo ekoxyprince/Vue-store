@@ -45,6 +45,10 @@ const Product = database.define(
     brand: {
       type: Sequelize.STRING,
     },
+    orderCount: {
+      type: Sequelize.INTEGER,
+      defaultValue: 0,
+    },
   },
   {
     timestamps: true,

@@ -2,7 +2,13 @@
   <v-container style="border-bottom: 1px solid #cdcdcdff">
     <h2 class="header">New Arrivals</h2>
     <div class="card-wrapper">
-      <ProductCard v-for="product in newArrivals" :product="product" />
+      <ProductSkeleton v-if="isFetching" v-for="index in Array(4).fill(0)" />
+      <ProductCard
+        v-for="product in data.data"
+        :product="product"
+        :key="product.id"
+        v-else
+      />
     </div>
     <div
       style="
@@ -22,10 +28,16 @@
 </template>
 
 <script setup>
-import products from "@/constants/products";
 import { useRouter } from "vue-router";
+import { useQuery } from "@tanstack/vue-query";
+import ProductService from "@/services/ProductService";
+import ProductSkeleton from "../ui/ProductSkeleton.vue";
 const router = useRouter();
-const newArrivals = ref(products.filter((d, i) => d.reviewsCount <= 10));
+
+const { data, isFetching } = useQuery({
+  queryKey: ["new-arivals"],
+  queryFn: () => ProductService.getAllProducts({ page: 1, limit: 4 }),
+});
 const handlePress = () => {
   router.push("/shop");
 };

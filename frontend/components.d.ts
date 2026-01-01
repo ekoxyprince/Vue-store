@@ -28,6 +28,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     StyleSection: typeof import('./src/components/home/StyleSection.vue')['default']
+    TestimonialSkeleton: typeof import('./src/components/ui/TestimonialSkeleton.vue')['default']
     TestimonyCard: typeof import('./src/components/ui/TestimonyCard.vue')['default']
     TopSelling: typeof import('./src/components/home/TopSelling.vue')['default']
   }

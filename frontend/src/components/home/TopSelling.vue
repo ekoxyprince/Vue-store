@@ -2,7 +2,13 @@
   <v-container style="border-bottom: 1px solid #cdcdcdff">
     <h2 class="header">Top Selling</h2>
     <div class="card-wrapper">
-      <ProductCard v-for="product in topSelling" :product="product" />
+      <ProductSkeleton v-if="isFetching" v-for="index in Array(4).fill(0)" />
+      <ProductCard
+        v-for="product in data.data"
+        :product="product"
+        :key="product.id"
+        v-else
+      />
     </div>
     <div
       style="
@@ -13,6 +19,7 @@
       "
     >
       <PrimaryButton
+        @press="router.push('/sales')"
         styles="background-color:white; border:1px solid #eee; color:#000;"
         >View All</PrimaryButton
       >
@@ -22,6 +29,20 @@
 
 <script setup>
 import products from "@/constants/products";
+import { useQuery } from "@tanstack/vue-query";
+import ProductService from "@/services/ProductService";
+import ProductSkeleton from "../ui/ProductSkeleton.vue";
+const router = useRouter();
+
+const { data, isFetching } = useQuery({
+  queryKey: ["top-selling"],
+  queryFn: () =>
+    ProductService.getAllProducts({
+      page: 1,
+      limit: 4,
+      filter: { sales: "top-selling" },
+    }),
+});
 const topSelling = ref(products.filter((d, i) => d.reviewsCount >= 50));
 </script>
 

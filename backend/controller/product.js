@@ -7,6 +7,7 @@ import Sequelize, { Op } from "sequelize";
 
 export const getAllProducts = catchAsync(async (req, res) => {
   const where = {};
+  let order = [["createdAt", "DESC"]];
   if (req.query.category) {
     where.category = req.query.category;
   }
@@ -18,6 +19,9 @@ export const getAllProducts = catchAsync(async (req, res) => {
       [Op.gte]: req.query.minPrice,
       [Op.lte]: req.query.maxPrice,
     };
+  }
+  if (req.query.sales) {
+    order = [["orderCount", "DESC"]];
   }
   if (req.query.search) {
     where.name = { [Op.iLike]: `%${req.query.search}%` };
@@ -32,6 +36,7 @@ export const getAllProducts = catchAsync(async (req, res) => {
   const totalProducts = await Product.count({ where });
   const products = await Product.findAll({
     subKey: false,
+    order: order,
     attributes: {
       include: [
         [
