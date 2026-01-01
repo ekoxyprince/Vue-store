@@ -7,8 +7,8 @@ export const ENV = {
   dbName: process.env.DB_NAME,
   dbUser: process.env.DB_USER,
   dbPassword: process.env.DB_PASSWORD,
-  dbHost: process.env.DB_HOST || "localhost",
-  dbPort: process.env.DB_PORT || 3306,
+  dbHost: process.env.DB_HOST,
+  dbPort: process.env.DB_PORT,
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "30d",
   jwtSecret: process.env.JWT_SECRET,
 };
