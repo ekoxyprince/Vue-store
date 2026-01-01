@@ -12,3 +12,4 @@ export const ENV = {
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "30d",
   jwtSecret: process.env.JWT_SECRET,
 };
+console.log(ENV);
