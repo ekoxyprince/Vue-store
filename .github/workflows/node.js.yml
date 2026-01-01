@@ -13,6 +13,14 @@ jobs:
   build:
     runs-on: ["self-hosted", "Linux", "X64"]
 
+    env:
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+
     strategy:
       matrix:
         node-version: [20.x]
@@ -25,13 +33,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
-        env:
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_HOST: ${{ secrets.DB_HOST }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          DB_PORT: ${{ secrets.DB_PORT }}
       - run: npm ci
       - run: npm run build --if-present
       - run: pm2 restart store

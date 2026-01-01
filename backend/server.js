@@ -14,8 +14,6 @@ Product.hasMany(Review, { foreignKey: "productId" });
 Review.belongsTo(User, { foreignKey: "userId", onDelete: "CASCADE" });
 User.hasMany(Review, { foreignKey: "userId" });
 
-const server = http.createServer(app);
-
 connectDb()
   .then((resp) => {
     return database.sync();
