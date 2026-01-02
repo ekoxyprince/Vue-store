@@ -115,6 +115,11 @@ import OrderService from "@/services/OrderService";
 import toast from "vue3-hot-toast";
 const queryClient = useQueryClient();
 const formData = ref({});
+const isActive = ref(false);
+const isActiveView = ref(false);
+const isEditing = ref(false);
+const products = ref([]);
+const form = ref(null);
 const updateMutation = useMutation({
   mutationFn: OrderService.update,
   onSuccess: (resp) => {
@@ -136,11 +141,20 @@ const changeOptions = ({ page: pageNum, itemsPerPage, sortBy }) => {
   page.value = pageNum;
   limit.value = itemsPerPage;
 };
-const isActive = ref(false);
-const isActiveView = ref(false);
-const isEditing = ref(false);
-const products = ref([]);
-const form = ref(null);
+const submit = async (isActive) => {
+  if (isEditing.value) {
+    await updateMutation.mutateAsync(formData.value, {
+      onSettled: (resp) => {
+        queryClient.invalidateQueries({
+          queryKey: ["orders"],
+        });
+        isActive.value = false;
+      },
+    });
+  } else {
+    console.log("Not editing");
+  }
+};
 const headers = ref([
   {
     title: "OrderId",
@@ -154,6 +168,7 @@ const headers = ref([
   { title: "date", key: "date", align: "end" },
   { title: "Actions", key: "actions", align: "end" },
 ]);
+
 const status = ref([
   { id: 1, name: "processing" },
   { id: 2, name: "delivered" },
@@ -168,20 +183,6 @@ const viewOrderItem = (item) => {
   products.value = item.products;
   isActiveView.value = true;
   console.log(item);
-};
-const submit = async (isActive) => {
-  if (!isEditing.value) {
-    console.log("Not editing");
-  } else {
-    await updateMutation.mutateAsync(formData.value, {
-      onSettled: (resp) => {
-        queryClient.invalidateQueries({
-          queryKey: ["orders"],
-        });
-        isActive.value = false;
-      },
-    });
-  }
 };
 </script>
 

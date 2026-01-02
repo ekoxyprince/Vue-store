@@ -14,30 +14,35 @@
       <DashboardCard
         title="Total Customers"
         icon="pi-users"
-        value="120"
-        amount="10"
+        :value="dashboardStats?.data.totalCustomers"
+        :amount="dashboardStats?.data.customerToday"
       />
     </v-col>
     <v-col cols="12" lg="4">
       <DashboardCard
         title="Total Orders"
         icon="pi-shopping-cart"
-        value="20"
-        amount="0"
+        :value="dashboardStats?.data.totalOrders"
+        :amount="dashboardStats?.data.orderToday"
       />
     </v-col>
     <v-col cols="12" lg="4">
       <DashboardCard
         title="Total Products"
         icon="pi-box"
-        value="50"
-        amount="2"
+        :value="dashboardStats?.data.totalProducts"
+        :amount="dashboardStats?.data.productToday"
       />
     </v-col>
   </v-row>
   <v-row>
     <div class="card table-wrapper">
-      <DataTable :value="products" tableStyle="min-width: 50rem">
+      <h2>Last 5 Users</h2>
+      <DataTable
+        v-if="!isFetching"
+        :value="users.data"
+        tableStyle="min-width: 50rem"
+      >
         <Column
           v-for="col of columns"
           :key="col.field"
@@ -50,24 +55,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
 import { DataTable, Column } from "primevue";
-
-onMounted(() => {
-  products.value = [
-    { code: "P001", name: "Product 1", category: "Category A", quantity: 100 },
-    { code: "P002", name: "Product 2", category: "Category B", quantity: 150 },
-    { code: "P003", name: "Product 3", category: "Category A", quantity: 200 },
-    { code: "P004", name: "Product 4", category: "Category C", quantity: 250 },
-  ];
+import { useQuery } from "@tanstack/vue-query";
+import AnalyticsService from "@/services/AnalyticsService";
+import UserService from "@/services/UserService";
+const { data: dashboardStats } = useQuery({
+  queryKey: ["stats"],
+  queryFn: () => AnalyticsService.getDashboardStats(),
 });
-
-const products = ref();
+const { data: users, isFetching } = useQuery({
+  queryKey: ["users"],
+  queryFn: () => UserService.getAllUsers({ page: 1, limit: 5 }),
+});
 const columns = [
-  { field: "code", header: "Code" },
-  { field: "name", header: "Name" },
-  { field: "category", header: "Category" },
-  { field: "quantity", header: "Quantity" },
+  { field: "fullname", header: "Fullname" },
+  { field: "email", header: "Email" },
+  { field: "phone", header: "Phone" },
+  { field: "address", header: "Address" },
 ];
 </script>
 

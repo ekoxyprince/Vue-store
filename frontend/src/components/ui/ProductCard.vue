@@ -9,7 +9,14 @@
           cover
         ></v-img>
         <button
-          v-if="!cart.items.some((it) => it.product.id === product.id)"
+          :disabled="true"
+          class="add-to-cart-btn"
+          v-if="product.stockCount <= 0"
+        >
+          Out of stock
+        </button>
+        <button
+          v-else-if="!cart.items.some((it) => it.product.id === product.id)"
           @click="addToCart.call(this, product)"
           class="add-to-cart-btn"
         >

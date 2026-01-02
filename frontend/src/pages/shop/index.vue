@@ -367,7 +367,7 @@ const pageRef = ref(null);
 const filterRef = ref(null);
 const filterActive = ref(false);
 const filter = ref(null);
-const range = ref([30000, 1000000]);
+const range = ref([5000, 1000000]);
 onMounted(() => {
   window.addEventListener("scroll", (e) => {
     if (false) {
