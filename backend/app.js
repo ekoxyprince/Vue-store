@@ -31,7 +31,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", auth, userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/coupons", auth, couponRoutes);
-app.use("/api/reviews", auth, reviewRoutes);
+app.use("/api/reviews", reviewRoutes);
 app.use("/api/orders", auth, orderRoutes);
 app.use("/api/analytics", auth, isAdmin, analyticsRoutes);
 app.use("/api/notifications", notificationRoutes);
