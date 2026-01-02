@@ -19,7 +19,7 @@ export const getUserProfile = catchAsync(async (req, res) => {
 
 export const updateUserProfile = catchAsync(async (req, res) => {
   const { fullname, address, phone } = req.body;
-  const user = await User.findByPk(req.user.id);
+  const user = await User.findByPk(req.user.id, { include: ["orders"] });
   if (fullname) user.fullname = fullname;
   if (address) user.address = address;
   if (phone) user.phone = phone;

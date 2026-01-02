@@ -11,6 +11,7 @@ import userRoutes from "./routes/user.js";
 import productRoutes from "./routes/product.js";
 import couponRoutes from "./routes/coupon.js";
 import reviewRoutes from "./routes/review.js";
+import orderRoutes from "./routes/order.js";
 
 app.use(express.json());
 app.use(express.static("./backend/public"));
@@ -28,6 +29,7 @@ app.use("/api/users", auth, userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/coupons", auth, couponRoutes);
 app.use("/api/reviews", auth, reviewRoutes);
+app.use("/api/orders", auth, orderRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "frontend", "dist")));

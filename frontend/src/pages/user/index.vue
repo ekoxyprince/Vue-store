@@ -134,34 +134,22 @@
                   { text: 'Status', value: 'status' },
                   { text: 'Total', value: 'total' },
                 ]"
-                :items="[
-                  {
-                    orderId: '1001',
-                    date: '2024-01-15',
-                    status: 'Delivered',
-                    total: '$150.00',
-                  },
-                  {
-                    orderId: '1002',
-                    date: '2024-02-20',
-                    status: 'Processing',
-                    total: '$85.00',
-                  },
-                  {
-                    orderId: '1003',
-                    date: '2024-03-05',
-                    status: 'Cancelled',
-                    total: '$60.00',
-                  },
-                ]"
+                :items="
+                  auth.details.orders.map((order) => ({
+                    orderId: order.id,
+                    status: order.status,
+                    date: new Date(order.createdAt).toLocaleDateString(),
+                    total: `₦${order.total}`,
+                  }))
+                "
                 class="elevation-1"
               >
                 <template #item.status="{ item }">
                   <v-chip
                     :color="
-                      item.status === 'Delivered'
+                      item.status === 'delivered'
                         ? 'green'
-                        : item.status === 'Processing'
+                        : item.status === 'processing'
                         ? 'blue'
                         : 'red'
                     "

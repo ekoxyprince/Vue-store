@@ -36,6 +36,7 @@ export const register = catchAsync(async (req, res) => {
       address: user.address,
       phone: user.phone,
       token,
+      orders: await user.getOrders(),
     },
   });
 });
@@ -65,6 +66,7 @@ export const login = catchAsync(async (req, res) => {
       address: user.address,
       phone: user.phone,
       token,
+      orders: await user.getOrders(),
     },
   });
 });

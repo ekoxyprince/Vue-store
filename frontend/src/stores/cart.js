@@ -25,6 +25,9 @@ export const useCartStore = defineStore("cart", {
       const item = this.items.find((it) => it.product.id == id);
       if (item && item.quantity) item.quantity--;
     },
+    clearCart: function () {
+      this.items = [];
+    },
   },
   persist: true,
 });

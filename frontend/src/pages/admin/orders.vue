@@ -15,154 +15,198 @@
       <v-responsive>
         <div class="table-wrapper">
           <v-data-table-server
-            v-model:items-per-page="itemsPerPage"
+            v-model:items-per-page="limit"
             :headers="headers"
-            :items="serverItems"
-            :items-length="totalItems"
-            :loading="loading"
-            :search="search"
+            :items="data?.data"
+            :items-length="data?.meta?.totalOrders"
+            :loading="isFetching"
             item-value="name"
-            @update:options="loadItems"
-          />
+            @update:options="changeOptions"
+          >
+            <template #item.actions="{ item }">
+              <v-btn
+                icon
+                size="small"
+                variant="text"
+                color="#000"
+                @click="editOrder.call(this, item)"
+              >
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+              <v-btn
+                icon
+                size="small"
+                variant="text"
+                color="#000"
+                @click="viewOrderItem.call(this, item)"
+              >
+                <v-icon>mdi-eye</v-icon>
+              </v-btn>
+            </template>
+            <template #item.date="{ item }">
+              <p>{{ new Date(item.createdAt).toLocaleDateString() }}</p>
+            </template>
+          </v-data-table-server>
         </div>
       </v-responsive>
     </v-col>
   </v-row>
+  <v-dialog v-model="isActive" max-width="500">
+    <template #default="{ isActive }">
+      <v-card :title="isEditing ? 'Edit Order' : 'Add Coupon'" max-width="700">
+        <v-form ref="form" @submit.prevent="submit(isActive)">
+          <v-card-text>
+            <v-row dense>
+              <v-col cols="6">
+                <v-select
+                  label="Status"
+                  :items="status"
+                  item-title="name"
+                  item-value="name"
+                  v-model="formData.status"
+                  required
+                />
+              </v-col>
+            </v-row>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer />
+
+            <v-btn variant="text" @click="isActive.value = false">
+              Cancel
+            </v-btn>
+
+            <v-btn color="primary" type="submit"> Save Order </v-btn>
+          </v-card-actions>
+        </v-form>
+      </v-card>
+    </template>
+  </v-dialog>
+  <v-dialog v-model="isActiveView" max-width="500">
+    <template #default="{ isActive }">
+      <v-card title="Order Items" max-width="700">
+        <v-form ref="form" @submit.prevent="submit(isActive)">
+          <v-card-text>
+            <v-row dense v-for="product in products" v-if="isActiveView">
+              <div class="wrapper">
+                <OrderItem :item="product" />
+              </div>
+            </v-row>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer />
+
+            <v-btn variant="text" @click="isActive.value = false">
+              Cancel
+            </v-btn>
+          </v-card-actions>
+        </v-form>
+      </v-card>
+    </template>
+  </v-dialog>
 </template>
 
 <script setup>
 import { ref } from "vue";
-
-const desserts = [
-  {
-    name: "Frozen Yogurt",
-    calories: 159,
-    fat: 6,
-    carbs: 24,
-    protein: 4,
-    iron: "1",
+import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
+import OrderService from "@/services/OrderService";
+import toast from "vue3-hot-toast";
+const queryClient = useQueryClient();
+const formData = ref({});
+const updateMutation = useMutation({
+  mutationFn: OrderService.update,
+  onSuccess: (resp) => {
+    toast.success("Order updated");
   },
-  {
-    name: "Jelly bean",
-    calories: 375,
-    fat: 0,
-    carbs: 94,
-    protein: 0,
-    iron: "0",
+  onError: (error) => {
+    toast.error(error.message);
   },
-  {
-    name: "KitKat",
-    calories: 518,
-    fat: 26,
-    carbs: 65,
-    protein: 7,
-    iron: "6",
-  },
-  {
-    name: "Eclair",
-    calories: 262,
-    fat: 16,
-    carbs: 23,
-    protein: 6,
-    iron: "7",
-  },
-  {
-    name: "Gingerbread",
-    calories: 356,
-    fat: 16,
-    carbs: 49,
-    protein: 3.9,
-    iron: "16",
-  },
-  {
-    name: "Ice cream sandwich",
-    calories: 237,
-    fat: 9,
-    carbs: 37,
-    protein: 4.3,
-    iron: "1",
-  },
-  {
-    name: "Lollipop",
-    calories: 392,
-    fat: 0.2,
-    carbs: 98,
-    protein: 0,
-    iron: "2",
-  },
-  {
-    name: "Cupcake",
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-    protein: 4.3,
-    iron: "8",
-  },
-  {
-    name: "Honeycomb",
-    calories: 408,
-    fat: 3.2,
-    carbs: 87,
-    protein: 6.5,
-    iron: "45",
-  },
-  {
-    name: "Donut",
-    calories: 452,
-    fat: 25,
-    carbs: 51,
-    protein: 4.9,
-    iron: "22",
-  },
-];
-const FakeAPI = {
-  async fetch({ page, itemsPerPage, sortBy }) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const start = (page - 1) * itemsPerPage;
-        const end = start + itemsPerPage;
-        const items = desserts.slice();
-        if (sortBy.length) {
-          const sortKey = sortBy[0].key;
-          const sortOrder = sortBy[0].order;
-          items.sort((a, b) => {
-            const aValue = a[sortKey];
-            const bValue = b[sortKey];
-            return sortOrder === "desc" ? bValue - aValue : aValue - bValue;
-          });
-        }
-        const paginated = items.slice(start, end === -1 ? undefined : end);
-        resolve({ items: paginated, total: items.length });
-      }, 500);
-    });
-  },
+});
+const page = ref(1);
+const limit = ref(10);
+const queryKey = computed(() => ["orders", page.value, limit.value]);
+const { data, isFetching } = useQuery({
+  queryKey: queryKey,
+  queryFn: () =>
+    OrderService.getAllOrders({ page: page.value, limit: limit.value }),
+});
+const changeOptions = ({ page: pageNum, itemsPerPage, sortBy }) => {
+  page.value = pageNum;
+  limit.value = itemsPerPage;
 };
-const itemsPerPage = ref(5);
+const isActive = ref(false);
+const isActiveView = ref(false);
+const isEditing = ref(false);
+const products = ref([]);
+const form = ref(null);
 const headers = ref([
   {
-    title: "Dessert (100g serving)",
+    title: "OrderId",
     align: "start",
     sortable: false,
-    key: "name",
+    key: "id",
   },
-  { title: "Calories", key: "calories", align: "end" },
-  { title: "Fat (g)", key: "fat", align: "end" },
-  { title: "Carbs (g)", key: "carbs", align: "end" },
-  { title: "Protein (g)", key: "protein", align: "end" },
-  { title: "Iron (%)", key: "iron", align: "end" },
+  { title: "Total", key: "total", align: "end" },
+  { title: "Status", key: "status", align: "end" },
+  { title: "User", key: "user.fullname", align: "end" },
+  { title: "date", key: "date", align: "end" },
+  { title: "Actions", key: "actions", align: "end" },
 ]);
-const search = ref("");
-const serverItems = ref([]);
-const loading = ref(true);
-const totalItems = ref(0);
-function loadItems({ page, itemsPerPage, sortBy }) {
-  loading.value = true;
-  FakeAPI.fetch({ page, itemsPerPage, sortBy }).then(({ items, total }) => {
-    serverItems.value = items;
-    totalItems.value = total;
-    loading.value = false;
-  });
-}
+const status = ref([
+  { id: 1, name: "processing" },
+  { id: 2, name: "delivered" },
+  { id: 2, name: "canceled" },
+]);
+const editOrder = (item) => {
+  formData.value = { ...item };
+  isActive.value = true;
+  isEditing.value = true;
+};
+const viewOrderItem = (item) => {
+  products.value = item.products;
+  isActiveView.value = true;
+  console.log(item);
+};
+const submit = async (isActive) => {
+  if (!isEditing.value) {
+    console.log("Not editing");
+  } else {
+    await updateMutation.mutateAsync(formData.value, {
+      onSettled: (resp) => {
+        queryClient.invalidateQueries({
+          queryKey: ["orders"],
+        });
+        isActive.value = false;
+      },
+    });
+  }
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+.wrapper {
+  width: 468px;
+}
+.table-wrapper {
+  overflow-x: auto !important;
+  width: 100%;
+}
+@media (max-width: 468px) {
+  .table-wrapper {
+    max-width: 400px;
+  }
+  .wrapper {
+    width: 400px;
+  }
+}
+@media (max-width: 400px) {
+  .table-wrapper {
+    max-width: 320px;
+  }
+  .wrapper {
+    width: 300px;
+  }
+}
+</style>

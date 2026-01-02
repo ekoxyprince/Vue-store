@@ -64,6 +64,8 @@
             >
           </div>
           <PrimaryButton
+            :isDisable="isSubmited"
+            @press="submit"
             styles="background-color:#000; color:#fff; width:100%; display:flex;gap:10px; align-items:center;"
             ><p>Proceed to Checkout</p>
             <i class="pi pi-arrow-right"></i
@@ -77,16 +79,29 @@
 import { onMounted } from "vue";
 import { useCartStore } from "@/stores/cart";
 import CouponService from "@/services/CouponService";
+import OrderService from "@/services/OrderService";
+import { useMutation } from "@tanstack/vue-query";
 import toast from "vue3-hot-toast";
 const cart = useCartStore();
 const discount = ref(0);
 const isCodeFound = ref(false);
-const code = ref(undefined);
+const isSubmited = ref(false);
+const code = ref("");
 const subTotal = computed(() =>
   cart.items.reduce((sum, item) => {
     return sum + item.product.finalPrice * item.quantity;
   }, 0)
 );
+const mutation = useMutation({
+  mutationKey: ["create-order"],
+  mutationFn: OrderService.create,
+  onSuccess: (resp) => {
+    toast.success("order created!");
+  },
+  onError: (error) => {
+    toast.error(error.message);
+  },
+});
 onMounted(() => {
   window.scrollTo(0, 0);
 });
@@ -98,6 +113,29 @@ const applyCoupon = async () => {
   } catch (error) {
     toast.error(error.message);
   }
+};
+const submit = async () => {
+  if (cart.items.length == 0) {
+    toast.error("No item in cart");
+    return;
+  }
+  isSubmited.value = true;
+  await mutation.mutateAsync(
+    {
+      items: cart.items,
+      coupon: code.value,
+      subtotal: subTotal.value,
+    },
+    {
+      onSettled: (resp) => {
+        if (resp) {
+          window.location.href = `https://wa.me/+1234567890?text=${resp.orderId}`;
+        }
+        isSubmited.value = false;
+        cart.clearCart();
+      },
+    }
+  );
 };
 </script>
 
