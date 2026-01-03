@@ -16,27 +16,43 @@
             Have questions or need assistance? Feel free to reach out to us
             using the contact information below.
           </p>
-          <p>Email: support@shop.co</p>
-          <p>Phone: +1 (555) 123-4567</p>
+          <p>Email: support@aerclothingbrand.ng</p>
+          <p>Phone: +234 (704) 705-3308</p>
         </v-col>
         <v-col cols="12" md="6">
           <h2>Send us a Message</h2>
-          <form action="#" method="post">
+          <form @submit.prevent="submit" action="#" method="post">
             <div class="mb-1 form-group">
-              <input type="text" id="name" class="form-control" />
+              <input
+                v-model="formData.name"
+                type="text"
+                id="name"
+                class="form-control"
+              />
               <label for="name">Name</label>
             </div>
             <div class="mb-1 form-group">
-              <input type="text" id="phone" class="form-control" />
-              <label for="phone">Phone</label>
+              <input
+                v-model="formData.email"
+                type="email"
+                id="email"
+                class="form-control"
+              />
+              <label for="email">Email</label>
             </div>
             <div class="mb-1 form-group">
-              <input type="email" id="email" class="form-control" />
-              <label for="email">Email</label>
+              <input
+                v-model="formData.subject"
+                type="text"
+                id="subject"
+                class="form-control"
+              />
+              <label for="subject">Subject</label>
             </div>
             <div class="mb-1 form-group">
               <textarea
                 id="message"
+                v-model="formData.message"
                 placeholder=" Enter Message Here..."
                 class="form-control"
               >
@@ -56,9 +72,34 @@
 
 <script setup>
 import { onMounted } from "vue";
+import NotificationService from "@/services/NotificationService";
+import { useMutation } from "@tanstack/vue-query";
+import toast from "vue3-hot-toast";
+const formData = ref({
+  email: "",
+  name: "",
+  subject: "",
+  message: "",
+});
 onMounted(() => {
   window.scrollTo(0, 0);
 });
+const mutation = useMutation({
+  mutationFn: NotificationService.sendNotification,
+  onSuccess: (resp) => {
+    toast.success("Message sent");
+  },
+  onError: (error) => {
+    toast.error(error.message);
+  },
+});
+const submit = async (isActive) => {
+  await mutation.mutateAsync(formData.value, {
+    onSettled: (resp) => {
+      formData.value = {};
+    },
+  });
+};
 </script>
 
 <style scoped>

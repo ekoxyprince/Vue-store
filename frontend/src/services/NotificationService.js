@@ -11,6 +11,16 @@ class NotificationService {
         throw new Error(error?.response?.data?.message || error.message);
       });
   }
+  sendNotification(data) {
+    return apiInstance
+      .post("/api/notifications/contact", data, {})
+      .then((resp) => {
+        return resp.data;
+      })
+      .catch((error) => {
+        throw new Error(error?.response?.data?.message || error.message);
+      });
+  }
 }
 
 export default new NotificationService();

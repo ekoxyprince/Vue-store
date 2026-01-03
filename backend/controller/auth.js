@@ -5,6 +5,7 @@ import { ENV as env } from "../config/env.js";
 import catchAsync from "../utils/catchAsync.js";
 import crypto from "crypto";
 import { Op } from "sequelize";
+import { mail } from "../utils/mailer.js";
 
 export const register = catchAsync(async (req, res) => {
   const { fullname, email, password, phone, address } = req.body;
@@ -16,6 +17,35 @@ export const register = catchAsync(async (req, res) => {
       .json({ success: false, message: "User already exists" });
   }
   const hashedPassword = await bcrypt.hash(password, 12);
+  mail(
+    undefined,
+    fullname,
+    email,
+    "Welcome to AER — Your Journey Begins 🚀",
+    `Welcome to AER (Arusiegi Republic)!
+
+We’re excited to have you join our community. Your account has been successfully created, and you now have access to everything AER has to offer — from exclusive content to future updates and events.
+
+If you ever need help or have questions, our support team is always here for you.
+
+Welcome aboard, and enjoy the experience.`
+  );
+  mail(
+    undefined,
+    undefined,
+    undefined,
+    "New User Registration — AER",
+    `A new user has successfully registered on AER (Arusiegi Republic).
+
+User Details:
+• Full Name: ${fullname}
+• Email: ${email}
+
+You can review or manage this account from the admin dashboard.
+
+This is an automated notification.`
+  );
+
   const user = await User.create({
     fullname,
     email,
@@ -87,8 +117,23 @@ export const resetPassword = catchAsync(async (req, res) => {
     resetPasswordToken: hashedResetToken,
     resetPasswordExpires,
   });
-  //send reset token via email logic goes here
-  console.log(resetToken);
+  const resetUrl = `${req.protocol}://${req.get(
+    "host"
+  )}/reset-password/${resetToken}`;
+  await mail(
+    "default",
+    user.fullname,
+    user.email,
+    "Reset Your Password — AER",
+    `You requested a password reset.
+
+Click the link below to reset your password:
+${resetUrl}
+
+If you did not request this, please ignore this email.
+This link will expire in 1 hour.`
+  );
+
   res.status(200).json({
     success: true,
     message: "Password reset token generated",

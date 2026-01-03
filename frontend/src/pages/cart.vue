@@ -129,7 +129,10 @@ const submit = async () => {
     {
       onSettled: (resp) => {
         if (resp) {
-          window.location.href = `https://wa.me/+1234567890?text=${resp.orderId}`;
+          const message = `Hello, I just placed an order on AER. My Order ID is ${resp.orderId}.`;
+          window.location.href = `https://wa.me/2347047053308?text=${encodeURIComponent(
+            message
+          )}`;
         }
         isSubmited.value = false;
         cart.clearCart();

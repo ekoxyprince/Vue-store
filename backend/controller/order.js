@@ -5,6 +5,7 @@ import catchAsync from "../utils/catchAsync.js";
 import { Op } from "sequelize";
 import Product from "../models/product.js";
 import User from "../models/user.js";
+import { mail } from "../utils/mailer.js";
 
 export const createOrder = catchAsync(async (req, res) => {
   const { items, subtotal, coupon } = req.body;
@@ -13,7 +14,7 @@ export const createOrder = catchAsync(async (req, res) => {
   if (couponDetails) {
     total =
       Number(subtotal) -
-      Number(Number(subtotal) * (Number(coupon.discount) / 100));
+      Number(Number(subtotal) * (Number(couponDetails.discount) / 100));
     couponDetails.status = "inactive";
     await couponDetails.save();
   }
@@ -41,6 +42,24 @@ export const createOrder = catchAsync(async (req, res) => {
       await product.save();
     }
   }
+  mail("order", req.user.fullname, req.user.email, "Order Received", "", items);
+  mail(
+    "default",
+    undefined,
+    undefined,
+    "New Order Notification — AER",
+    `A new order has been successfully placed on AER (Arusiegi Republic).
+
+Order Summary:
+• Order ID: ${order.id}
+• Customer: ${req.user.fullname}
+• Email: ${req.user.email}
+• Total Amount: ${total}
+• Order Date: ${new Date().toDateString()}
+
+Please log in to the admin dashboard to review and process this order.`
+  );
+
   res.status(201).json({
     success: true,
     message: "Order created",
