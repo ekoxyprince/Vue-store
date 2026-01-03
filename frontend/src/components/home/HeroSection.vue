@@ -63,7 +63,8 @@ import pat2 from "@/assets/brand-5.png";
 import pat3 from "@/assets/brand-4.png";
 import pat4 from "@/assets/brand-2.png";
 import pat5 from "@/assets/brand-1.png";
-const brands = [pat1, pat2, pat3, pat4, pat5];
+import pat6 from "@/assets/logo-2.png";
+const brands = [pat1, pat2, pat3, pat4, pat5, pat6];
 </script>
 
 <style scoped>

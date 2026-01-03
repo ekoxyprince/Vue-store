@@ -29,9 +29,11 @@
               :key="category.title"
               class="router-link-container"
             >
-              <RouterLink class="router-link" :to="category.url">{{
-                category.title
-              }}</RouterLink>
+              <RouterLink
+                class="router-link"
+                :to="'/shop?category=' + category.value"
+                >{{ category.title }}</RouterLink
+              >
             </div>
           </div>
         </v-sheet>
@@ -42,6 +44,7 @@
 
 <script setup>
 const tab = ref("one");
+import { categories } from "@/constants/products";
 const menus = ref([
   {
     title: "Home",
@@ -62,36 +65,6 @@ const menus = ref([
   {
     title: "Signin/Register",
     url: "/signin",
-  },
-]);
-const categories = ref([
-  {
-    title: "Ladies Wears",
-    url: "/shop?category=ladies",
-  },
-  {
-    title: "Men's Wears",
-    url: "/shop?category=men",
-  },
-  {
-    title: "Gym Wears",
-    url: "/shop?category=gym",
-  },
-  {
-    title: "Casual Wears",
-    url: "/shop?category=casual",
-  },
-  {
-    title: "Luxury Wears",
-    url: "/shop?category=luxury",
-  },
-  {
-    title: "Suits",
-    url: "/shop?category=suits",
-  },
-  {
-    title: "Native Wears",
-    url: "/shop?category=native",
   },
 ]);
 </script>

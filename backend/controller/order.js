@@ -12,7 +12,8 @@ export const createOrder = catchAsync(async (req, res) => {
   const couponDetails = await Coupon.findOne({ where: { code: coupon } });
   if (couponDetails) {
     total =
-      Number(subtotal) - Number(subtotal) * (Number(coupon.discount) / 100);
+      Number(subtotal) -
+      Number(Number(subtotal) * (Number(coupon.discount) / 100));
     couponDetails.status = "inactive";
     await couponDetails.save();
   }

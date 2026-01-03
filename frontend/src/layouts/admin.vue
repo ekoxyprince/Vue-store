@@ -1,7 +1,9 @@
 <template>
   <div class="wrapper">
     <div class="navbar">
-      <div>Shop.co</div>
+      <div style="width: 200px; height: 100px">
+        <v-img style="width: 100%; height: 100%" :src="logo"></v-img>
+      </div>
       <v-app-bar-nav-icon
         v-if="smAndDown"
         @click.stop="isActive = !isActive"
@@ -28,6 +30,7 @@
 
 <script setup>
 import { useDisplay } from "vuetify";
+import logo from "@/assets/logo.png";
 const { smAndDown } = useDisplay();
 const isActive = ref(false);
 </script>

@@ -14,7 +14,7 @@
           <v-img :src="bg" alt="About Us Image"></v-img>
         </v-col>
         <v-col cols="12" md="6">
-          <h2>About Our Store</h2>
+          <h2>Style Of The 21st century</h2>
           <p>
             Welcome to our online store! We are dedicated to providing you with
             the best products and services. Our mission is to offer a wide range
@@ -39,7 +39,7 @@
 
 <script setup>
 import PageTitle from "@/components/ui/PageTitle.vue";
-import bg from "@/assets/bg.jpg";
+import bg from "@/assets/about.jpeg";
 import { onMounted } from "vue";
 onMounted(() => {
   window.scrollTo(0, 0);

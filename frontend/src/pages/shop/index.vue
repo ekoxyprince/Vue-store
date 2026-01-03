@@ -38,41 +38,14 @@
             </div>
             <div class="filter-title">
               <h2>Brands</h2>
-              <div class="select-wrapper">
+              <div class="select-wrapper" v-for="bra in brands">
                 <RadioButton
                   v-model="brand"
-                  inputId="10"
-                  name="Adidas"
-                  value="adidas"
+                  :inputId="bra.value"
+                  :name="bra.title"
+                  :value="bra.value"
                 />
-                <label for="10">Adidas</label>
-              </div>
-              <div class="select-wrapper">
-                <RadioButton
-                  v-model="brand"
-                  inputId="20"
-                  name="Versache"
-                  value="Versache"
-                />
-                <label for="20">Versache</label>
-              </div>
-              <div class="select-wrapper">
-                <RadioButton
-                  v-model="brand"
-                  inputId="30"
-                  name="Gucci"
-                  value="Gucci"
-                />
-                <label for="30">Gucci</label>
-              </div>
-              <div class="select-wrapper">
-                <RadioButton
-                  v-model="brand"
-                  inputId="40"
-                  name="Nike"
-                  value="nike"
-                />
-                <label for="40">Nike</label>
+                <label :for="bra.value">{{ bra.title }}</label>
               </div>
             </div>
             <div class="filter-title">
@@ -116,41 +89,14 @@
             </div>
             <div class="filter-title">
               <h2>Category</h2>
-              <div class="select-wrapper">
+              <div class="select-wrapper" v-for="cat in categories">
                 <RadioButton
                   v-model="category"
-                  inputId="10"
-                  name="Men's Clothing"
-                  value="Men's Clothing"
+                  :inputId="cat.value"
+                  :name="cat.title"
+                  :value="cat.value"
                 />
-                <label for="10">Men's Clothing</label>
-              </div>
-              <div class="select-wrapper">
-                <RadioButton
-                  v-model="category"
-                  inputId="20"
-                  name="Women's Clothing"
-                  value="Women's Clothing"
-                />
-                <label for="20">Women's Clothing</label>
-              </div>
-              <div class="select-wrapper">
-                <RadioButton
-                  v-model="category"
-                  inputId="30"
-                  name="Hand Bags"
-                  value="Hand Bags"
-                />
-                <label for="30">Hand Bags</label>
-              </div>
-              <div class="select-wrapper">
-                <RadioButton
-                  v-model="category"
-                  inputId="40"
-                  name="Shoes"
-                  value="Shoes"
-                />
-                <label for="40">Shoes</label>
+                <label :for="cat.value">{{ cat.title }}</label>
               </div>
             </div>
             <PrimaryButton
@@ -162,7 +108,7 @@
         </div>
         <div class="product-wrapper">
           <div class="product-wrapper-title">
-            <h2>Casual</h2>
+            <h2>Products</h2>
             <div style="display: flex; align-items: center; gap: 5px">
               <p>
                 showing {{ Number((page - 1) * limit) + 1 }} -{{
@@ -232,36 +178,14 @@
       </div>
       <div class="filter-title">
         <h2>Brands</h2>
-        <div class="select-wrapper">
+        <div class="select-wrapper" v-for="bra in brands">
           <RadioButton
             v-model="brand"
-            inputId="10"
-            name="Adidas"
-            value="adidas"
+            :inputId="bra.value"
+            :name="bra.title"
+            :value="bra.value"
           />
-          <label for="10">Adidas</label>
-        </div>
-        <div class="select-wrapper">
-          <RadioButton
-            v-model="brand"
-            inputId="20"
-            name="Versache"
-            value="Versache"
-          />
-          <label for="20">Versache</label>
-        </div>
-        <div class="select-wrapper">
-          <RadioButton
-            v-model="brand"
-            inputId="30"
-            name="Gucci"
-            value="Gucci"
-          />
-          <label for="30">Gucci</label>
-        </div>
-        <div class="select-wrapper">
-          <RadioButton v-model="brand" inputId="40" name="Nike" value="nike" />
-          <label for="40">Nike</label>
+          <label :for="bra.value">{{ bra.title }}</label>
         </div>
       </div>
       <div class="filter-title">
@@ -271,7 +195,7 @@
           <v-col cols="12">
             <v-range-slider
               v-model="range"
-              :min="5000"
+              :min="1"
               :max="1000000"
               :step="1"
               hide-details
@@ -305,41 +229,14 @@
       </div>
       <div class="filter-title">
         <h2>Category</h2>
-        <div class="select-wrapper">
+        <div class="select-wrapper" v-for="cat in categories">
           <RadioButton
             v-model="category"
-            inputId="10"
-            name="Men's Clothing"
-            value="Men's Clothing"
+            :inputId="cat.value"
+            :name="cat.title"
+            :value="cat.value"
           />
-          <label for="10">Men's Clothing</label>
-        </div>
-        <div class="select-wrapper">
-          <RadioButton
-            v-model="category"
-            inputId="20"
-            name="Women's Clothing"
-            value="Women's Clothing"
-          />
-          <label for="20">Women's Clothing</label>
-        </div>
-        <div class="select-wrapper">
-          <RadioButton
-            v-model="category"
-            inputId="30"
-            name="Hand Bags"
-            value="Hand Bags"
-          />
-          <label for="30">Hand Bags</label>
-        </div>
-        <div class="select-wrapper">
-          <RadioButton
-            v-model="category"
-            inputId="40"
-            name="Shoes"
-            value="Shoes"
-          />
-          <label for="40">Shoes</label>
+          <label :for="cat.value">{{ cat.title }}</label>
         </div>
       </div>
       <PrimaryButton
@@ -359,40 +256,33 @@ import { useDisplay } from "vuetify";
 import { Drawer } from "primevue";
 import { useQuery } from "@tanstack/vue-query";
 import ProductService from "@/services/ProductService";
+import { useRoute } from "vue-router";
+import { categories, brands } from "@/constants/products";
 const { mdAndDown } = useDisplay();
+const route = useRoute();
 const availabilty = ref("");
 const brand = ref("");
-const category = ref("");
+const category = ref(route?.query.category || "");
 const pageRef = ref(null);
 const filterRef = ref(null);
 const filterActive = ref(false);
-const filter = ref(null);
-const range = ref([5000, 1000000]);
-onMounted(() => {
-  window.addEventListener("scroll", (e) => {
-    if (false) {
-      const scrolled = window.scrollY;
-      if (scrolled > 151) {
-        filterRef.value.classList.add("sticky");
-      }
-      if (scrolled < 151) {
-        filterRef.value.classList.remove("sticky");
-      }
-      if (scrolled >= 1300) {
-        filterRef.value.classList.remove("sticky");
-      }
-    }
-  });
-  window.scrollTo(0, 0);
-});
+const range = ref([1, 1000000]);
 const page = ref(1);
 const limit = ref(5);
 const first = ref(1);
+const filter = ref({
+  availabilty: availabilty.value,
+  brand: brand.value,
+  category: category.value,
+  minPrice: range.value[0],
+  maxPrice: range.value[1],
+});
 const queryKey = computed(() => [
   "products",
   page.value,
   limit.value,
   filter.value,
+  () => route.query.category,
 ]);
 const { data, isFetching } = useQuery({
   queryKey: queryKey,
@@ -415,7 +305,7 @@ const onFilter = () => {
     minPrice: range.value[0],
     maxPrice: range.value[1],
   };
-  console.log(filter.value);
+  filterActive.value = false;
 };
 </script>
 

@@ -21,7 +21,7 @@ export const dashboardStats = catchAsync(async (req, res) => {
   const totalProducts = await Product.count();
   const customerToday = await User.count(dayQuery);
   const orderToday = await Order.count(dayQuery);
-  const productToday = await Order.count(dayQuery);
+  const productToday = await Product.count(dayQuery);
   res.status(200).json({
     success: true,
     data: {

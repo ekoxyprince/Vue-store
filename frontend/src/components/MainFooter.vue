@@ -16,7 +16,9 @@
       </div>
       <div class="footer-content">
         <div class="footer-content-item">
-          <h1 class="logo">SHOP.CO</h1>
+          <div style="width: 200px; height: 80px">
+            <v-img style="width: 100%; height: 100%" :src="logo"></v-img>
+          </div>
           <p class="footer-text">
             We have clothes that suits your style and which you’re proud to
             wear. From women to men.
@@ -87,6 +89,7 @@ import pay3 from "@/assets/Paypal.png";
 import pay4 from "@/assets/APay.png";
 import pay5 from "@/assets/GPay.png";
 const array = ref([pay1, pay2, pay3, pay4, pay5]);
+import logo from "@/assets/logo.png";
 </script>
 
 <style scoped lang="css">

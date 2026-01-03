@@ -287,3 +287,73 @@ const products = [
 ];
 
 export default products;
+
+export const categories = [
+  {
+    title: "Men's Clothing",
+    value: "mens_clothing",
+  },
+  {
+    title: "Women's Clothing",
+    value: "womens_clothing",
+  },
+  {
+    title: "Unisex Clothing",
+    value: "unisex_clothing",
+  },
+  {
+    title: "T-Shirts & Tops",
+    value: "tshirts_tops",
+  },
+  {
+    title: "Jeans & Trousers",
+    value: "jeans_trousers",
+  },
+  {
+    title: "Dresses",
+    value: "dresses",
+  },
+  {
+    title: "Outerwear & Jackets",
+    value: "outerwear_jackets",
+  },
+  {
+    title: "Activewear & Sportswear",
+    value: "activewear_sportswear",
+  },
+  {
+    title: "Underwear & Loungewear",
+    value: "underwear_loungewear",
+  },
+  {
+    title: "Accessories",
+    value: "accessories",
+  },
+];
+
+export const brands = [
+  {
+    title: "AER – Arusiegi Republic",
+    value: "aer_arusiegi_republic",
+  },
+  {
+    title: "Nike",
+    value: "nike",
+  },
+  {
+    title: "Adidas",
+    value: "adidas",
+  },
+  {
+    title: "Zara",
+    value: "zara",
+  },
+  {
+    title: "H&M",
+    value: "hm",
+  },
+  {
+    title: "Others",
+    value: "others",
+  },
+];

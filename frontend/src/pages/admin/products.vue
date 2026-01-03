@@ -67,8 +67,8 @@
                     <v-select
                       label="Category"
                       :items="categories"
-                      item-title="name"
-                      item-value="name"
+                      item-title="title"
+                      item-value="value"
                       v-model="formData.category"
                       required
                     />
@@ -79,8 +79,8 @@
                     <v-select
                       label="Brand"
                       :items="brands"
-                      item-title="name"
-                      item-value="name"
+                      item-title="title"
+                      item-value="value"
                       v-model="formData.brand"
                     />
                   </v-col>
@@ -176,6 +176,7 @@ import { ref } from "vue";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/vue-query";
 import ProductService from "@/services/ProductService";
 import toast from "vue3-hot-toast";
+import { categories, brands } from "@/constants/products";
 const queryClient = useQueryClient();
 const mutation = useMutation({
   mutationFn: ProductService.create,
@@ -210,17 +211,7 @@ const changeOptions = ({ page: pageNum, itemsPerPage, sortBy }) => {
 const isActive = ref(false);
 const isEditing = ref(false);
 const form = ref(null);
-const categories = ref([
-  { id: 1, name: "Electronics" },
-  { id: 2, name: "Clothing" },
-  { id: 3, name: "Home" },
-]);
 
-const brands = ref([
-  { id: 1, name: "Apple" },
-  { id: 2, name: "Samsung" },
-  { id: 3, name: "Nike" },
-]);
 const formData = ref({
   id: undefined,
   name: "",

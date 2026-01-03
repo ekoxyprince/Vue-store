@@ -24,7 +24,7 @@ export const getAllProducts = catchAsync(async (req, res) => {
     order = [["orderCount", "DESC"]];
   }
   if (req.query.search) {
-    where.name = { [Op.iLike]: `%${req.query.search}%` };
+    where.name = { [Op.like]: `%${req.query.search}%` };
   }
   if (req.query.availabilty) {
     where.stockCount =

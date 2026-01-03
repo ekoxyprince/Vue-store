@@ -48,10 +48,13 @@
       </div>
       <div class="price-wrapper">
         <p>₦{{ Number(product.finalPrice).toLocaleString("en-us") }}</p>
-        <p style="text-decoration: line-through; color: #888">
+        <p
+          style="text-decoration: line-through; color: #888"
+          v-if="parseInt(product.discount) !== 0"
+        >
           ₦{{ Number(product.price).toLocaleString("en-us") }}
         </p>
-        <div class="discount-wrapper">
+        <div class="discount-wrapper" v-if="parseInt(product.discount) !== 0">
           {{ Number(product.discount).toFixed(0) }}%
         </div>
       </div>

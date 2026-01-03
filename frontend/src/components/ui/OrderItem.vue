@@ -1,7 +1,7 @@
 <template>
   <div class="cart-container">
     <div class="cart-image-container">
-      <v-img class="cart-image" :src="image" />
+      <v-img class="cart-image" :src="item.images[0].url" />
     </div>
     <div class="cart-details">
       <div class="cart-details-row">

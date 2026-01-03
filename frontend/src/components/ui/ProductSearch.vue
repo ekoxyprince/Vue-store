@@ -1,28 +1,16 @@
 <template>
-  <div class="cart-container">
+  <div @click="handleClick" class="cart-container">
     <div class="cart-image-container">
-      <v-img class="cart-image" :src="item.product.images[0].url" />
+      <v-img class="cart-image" :src="image" />
     </div>
     <div class="cart-details">
       <div class="cart-details-row">
-        <h2>{{ item.product.name }}</h2>
-        <v-btn
-          icon
-          size="small"
-          variant="text"
-          color="#000"
-          @click="removeFromCart.call(this, item.product)"
-        >
-          <i @click="" style="color: red" class="pi pi-trash"></i>
-        </v-btn>
+        <h2>{{ item?.name }}</h2>
+        <v-btn icon size="small" variant="text" color="#000"> </v-btn>
       </div>
       <div class="cart-details-row">
-        <h1>₦{{ Number(item.product.finalPrice).toLocaleString("en-us") }}</h1>
-        <div class="input-wrapper">
-          <i @click="decreaseCount" class="pi pi-minus"></i>
-          <input v-model="props.item.quantity" type="number" readonly />
-          <i @click="increaseCount" class="pi pi-plus"></i>
-        </div>
+        <h1>₦{{ Number(item?.finalPrice).toLocaleString("en-us") }}</h1>
+        <div class="input-wrapper"></div>
       </div>
     </div>
   </div>
@@ -30,29 +18,15 @@
 
 <script setup>
 import image from "@/assets/hero-1.png";
-import { useCartStore } from "@/stores/cart";
-import toast from "vue3-hot-toast";
-const cart = useCartStore();
-const quantity = ref(1);
 const props = defineProps({
   item: {
     type: Object,
   },
 });
-const increaseCount = () => {
-  if (props.item.quantity < props.item.product.stockCount) {
-    cart.increaseQuantity(props.item.product.id);
-  }
+const emits = defineEmits(["route"]);
+const handleClick = () => {
+  emits("route");
 };
-const decreaseCount = () => {
-  if (props.item.quantity > 1) {
-    cart.decreaseQuantity(props.item.product.id);
-  }
-};
-function removeFromCart(product) {
-  cart.removeFromCart(product);
-  toast.success("removed from cart");
-}
 </script>
 
 <style scoped>
@@ -62,6 +36,7 @@ function removeFromCart(product) {
   align-items: center;
   padding: 10px;
   border-bottom: 1px solid #cdcdcdff;
+  cursor: pointer;
 }
 .cart-container:last-child {
   border-bottom: none;

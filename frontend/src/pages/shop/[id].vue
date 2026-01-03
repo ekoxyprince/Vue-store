@@ -195,9 +195,14 @@ import { useAuthStore } from "@/stores/auth";
 import toast from "vue3-hot-toast";
 import ReviewService from "@/services/ReviewService";
 const route = useRoute();
-const { data, isFetching } = useQuery({
-  queryKey: [`product-${route.params.id}`],
-  queryFn: () => ProductService.getProductById({ id: route.params.id }),
+const productId = computed(() => route.params.id);
+const { data, isFetching, refetch } = useQuery({
+  queryKey: [`product-${productId.value}`],
+  queryFn: () => ProductService.getProductById({ id: productId.value }),
+});
+watch(productId, (val) => {
+  refetch();
+  window.scrollTo(0, 0);
 });
 const cart = useCartStore();
 const auth = useAuthStore();
